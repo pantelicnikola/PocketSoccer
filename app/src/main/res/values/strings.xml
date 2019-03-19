@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">PocketSoccer</string>
+
+    <!--Main Activity-->
+    <string name="main_continue">Continue</string>
+    <string name="main_new_game">New Game</string>
+    <string name="main_scores">Scores</string>
+    <string name="main_settings">Settings</string>
+
+    <!--New Game-->
+    <string name="new_game_pve">vs Computer</string>
+    <string name="new_game_pvp">vs Player</string>
+
+    <!--New Game Settings-->
+    <string name="new_game_settings_add_player">Add Player</string>
+    <string name="new_game_settings_player_name_hint">Player Name</string>
+    <string name="new_game_settings_next">Next</string>
+    <string name="new_game_settings_play">Play</string>
+
+    <string-array name="country_names">
+        <item>Egypt</item>
+        <item>Algeria</item>
+        <item>Finland</item>
+        <item>Curacao</item>
+        <!--<item>Spain</item>-->
+        <!--<item>Mexico</item>-->
+        <!--<item>Australia</item>-->
+        <!--<item>India</item>-->
+        <!--<item>Liberia</item>-->
+        <!--<item>Nauru</item>-->
+        <!--<item>Belgium</item>-->
+        <!--<item>Greece</item>-->
+        <!--<item>Philippines</item>-->
+        <!--<item>Taiwan</item>-->
+        <!--<item>Nicaragua</item>-->
+        <!--<item>Norway</item>-->
+        <!--<item>Tanzania</item>-->
+        <!--<item>South Korea</item>-->
+        <!--<item>French Guiana</item>-->
+        <!--<item>Saint Kitts and Nevis</item>-->
+        <!--<item>Papua New Guinea</item>-->
+
+    </string-array>
+
+
+</resources>

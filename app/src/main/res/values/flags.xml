@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="country_flags">
+        <item>@drawable/egypt</item>
+        <item>@drawable/algeria</item>
+        <item>@drawable/finland</item>
+        <item>@drawable/curacao</item>
+    </array>
+</resources>
