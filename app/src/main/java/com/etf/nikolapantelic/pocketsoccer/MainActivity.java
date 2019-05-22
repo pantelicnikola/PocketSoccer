@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.etf.nikolapantelic.pocketsoccer.newGame.NewGameActivity;
+import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
 
 public class MainActivity extends AppCompatActivity {
 

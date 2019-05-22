@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.newGame;
+package com.etf.nikolapantelic.pocketsoccer.newgame;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
