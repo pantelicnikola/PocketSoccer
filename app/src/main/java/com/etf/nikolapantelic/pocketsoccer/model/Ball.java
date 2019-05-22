@@ -11,14 +11,14 @@ public class Ball {
     private float radius;
     private boolean moving;
 
+    private static final float TRACTION_FACTOR = 0.98f;
+
     public Ball(ImageView imageView) {
         this.imageView = imageView;
+        radius = imageView.getDrawable().getIntrinsicWidth();
+        moving = false;
         velX = 0;
         velY = 0;
-
-        radius = imageView.getDrawable().getIntrinsicWidth();
-
-        moving = false;
     }
 
     public float calculateCenterX() {
@@ -35,17 +35,17 @@ public class Ball {
         } else {
             float x = imageView.getX();
             float y = imageView.getY();
-            velX *= 0.98;
-            velY *= 0.98;
+            velX *= TRACTION_FACTOR;
+            velY *= TRACTION_FACTOR;
 
-            if (x <= 0 || x >= windowWidth) {
+            if (x <= 0 || x >= windowWidth - radius) {
                 velX = -velX;
                 imageView.setX(x + 2 * velX);
             } else {
                 imageView.setX(x + velX);
             }
 
-            if (y <= 0 || y >= windowHeight) {
+            if (y <= 0 || y >= windowHeight - radius) {
                 velY = -velY;
                 imageView.setY(y + 2 * velY);
             } else {

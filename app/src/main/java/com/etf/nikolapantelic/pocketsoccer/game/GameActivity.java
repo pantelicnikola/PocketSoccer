@@ -58,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
         t2p2.setImageResource(Game.player2.getCountry().getFlag());
         t2p3.setImageResource(Game.player2.getCountry().getFlag());
 
-        ball.setImageResource(R.mipmap.ic_launcher_round);
+        ball.setImageResource(R.drawable.footbal_default);
 
         Game.balls[0] = new Ball(ball);
         Game.balls[1] = new Ball(t1p1);
