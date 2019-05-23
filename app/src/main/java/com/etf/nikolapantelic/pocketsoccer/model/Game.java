@@ -16,8 +16,8 @@ public class Game {
     public static OpponentType opponent;
 
     public static void reset() {
-        player1 = null;
-        player2 = null;
+//        player1 = null;
+//        player2 = null;
 
         goalsPlayer1 = 0;
         goalsPlayer2 = 0;

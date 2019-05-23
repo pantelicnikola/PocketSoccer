@@ -1,6 +1,9 @@
 package com.etf.nikolapantelic.pocketsoccer.model;
 
+import android.content.Context;
 import android.widget.ImageView;
+
+import com.etf.nikolapantelic.pocketsoccer.R;
 
 import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowHeight;
 import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowWidth;
@@ -13,9 +16,9 @@ public class Ball {
 
     private static final float TRACTION_FACTOR = 0.98f;
 
-    public Ball(ImageView imageView) {
+    public Ball(ImageView imageView, float radius) {
         this.imageView = imageView;
-        radius = imageView.getDrawable().getIntrinsicWidth();
+        this.radius = radius;
         moving = false;
         velX = 0;
         velY = 0;
@@ -24,7 +27,6 @@ public class Ball {
     public float calculateCenterX() {
         return imageView.getX() + radius / 2;
     }
-
     public float calculateCenterY() {
         return imageView.getY() + radius / 2;
     }

@@ -7,8 +7,8 @@
     tools:context=".game.GameActivity">
 
     <ImageView
-        android:id="@+id/image_view_team1_player1"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team2_player1"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
@@ -19,8 +19,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_team1_player2"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team2_player2"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -34,8 +34,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_team1_player3"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team2_player3"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="40dp"
@@ -46,8 +46,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_team2_player1"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team1_player1"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
@@ -58,8 +58,8 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_team2_player2"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team1_player2"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -73,8 +73,8 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/image_view_team2_player3"
-        android:layout_width="70dp"
+        android:id="@+id/image_view_team1_player3"
+        android:layout_width="@dimen/player_ball_dimension"
         android:layout_height="0dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
@@ -86,7 +86,7 @@
 
     <ImageView
         android:id="@+id/image_view_ball"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/football_dimension"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
