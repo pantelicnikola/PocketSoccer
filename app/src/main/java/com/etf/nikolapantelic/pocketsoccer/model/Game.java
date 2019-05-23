@@ -1,26 +1,47 @@
 package com.etf.nikolapantelic.pocketsoccer.model;
 
-import com.etf.nikolapantelic.pocketsoccer.model.Country;
-import com.etf.nikolapantelic.pocketsoccer.model.Player;
-
 public class Game {
-    public static Country currentCountry = null;
 
-    public static Player player1 = null;
-    public static Player player2 = null;
+    public static Player player1;
+    public static Player player2;
 
-    public static int goalsPlayer1 = 0;
-    public static int goalsPlayer2 = 0;
+    public static int goalsPlayer1;
+    public static int goalsPlayer2;
 
-    public static int timeElapsed = 0; // time elapsed in game
-    public static int turn; // whose turn is it?
-    public static int turnTime; // amount of time player is given to perform a move
+    public static int timeElapsed; // time elapsed in game
+    public static Turn currentTurn; // whose turn is it?
 
-    public static Ball[] balls = new Ball[7];
+    public static Ball[] balls;
 
     public static OpponentType opponent;
+
+    public static void reset() {
+        player1 = null;
+        player2 = null;
+
+        goalsPlayer1 = 0;
+        goalsPlayer2 = 0;
+
+        timeElapsed = 0;
+        currentTurn = Turn.PLAYER1;
+        balls = new Ball[7];
+        opponent = null;
+
+    }
 
     public enum OpponentType {
         PVP, PVE
     }
+
+    public enum Turn {
+        PLAYER1, PLAYER2;
+        Turn next(Turn current) {
+            if (current.equals(PLAYER1)) {
+                return PLAYER2;
+            } else {
+                return PLAYER1;
+            }
+        }
+    }
+
 }

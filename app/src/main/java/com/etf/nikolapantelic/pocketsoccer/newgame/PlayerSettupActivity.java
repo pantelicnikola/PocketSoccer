@@ -24,16 +24,16 @@ import java.util.List;
 public class PlayerSettupActivity extends AppCompatActivity {
 
     private EditText playerName;
+    private Country selectedCountry;
     private Button actionButton;
-    private RecyclerView recyclerView;
-//    private Game.OpponentType opponentType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_settup);
+
+        final CountriesAdapter adapter = new CountriesAdapter(this);
 
         actionButton = findViewById(R.id.button_new_game_settup);
         actionButton.setEnabled(false);
@@ -52,8 +52,10 @@ public class PlayerSettupActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (Game.currentCountry != null && !s.toString().equals("")) {
+                if (selectedCountry != null && !s.toString().equals("")) {
                     actionButton.setEnabled(true);
+                } else {
+                    actionButton.setEnabled(false);
                 }
             }
         });
@@ -77,14 +79,12 @@ public class PlayerSettupActivity extends AppCompatActivity {
             });
         }
 
-        List<Country> countries = getCountriesFromResources();
-
-        CountriesAdapter adapter = new CountriesAdapter(countries);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                if (Game.currentCountry != null && !playerName.getText().toString().equals("")) {
+                selectedCountry = adapter.getSelectedCountry();
+                if (!playerName.getText().toString().equals("")) {
                     actionButton.setEnabled(true);
                 }
             }
@@ -95,16 +95,14 @@ public class PlayerSettupActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
-    
     private void onClickPlay() {
-        Player player = new Player(playerName.getText().toString(), Game.currentCountry, true);
+        Player player = new Player(playerName.getText().toString(), selectedCountry, true);
 
         if (Game.opponent.equals(Game.OpponentType.PVE)) {
             Game.player1 = player;
-            Player player2 = new Player("Bosko City", new Country("Android", R.mipmap.ic_launcher_round), false);
+            Player player2 = new Player("Droid", new Country("Droid", R.mipmap.ic_launcher_round), false);
             Game.player2 = player2;
         } else {
             Game.player2 = player;
@@ -117,25 +115,11 @@ public class PlayerSettupActivity extends AppCompatActivity {
 
 
     private void onClickContinue() {
-        Player player1 = new Player(playerName.getText().toString(), Game.currentCountry, true);
+        Player player1 = new Player(playerName.getText().toString(), selectedCountry, true);
         Game.player1 = player1;
 
         Intent intent = new Intent(this, PlayerSettupActivity.class);
         intent.putExtra("nesto", "nesto");
         startActivity(intent);
-    }
-
-    public List<Country> getCountriesFromResources() {
-        String[] countryNames = getResources().getStringArray(R.array.country_names);
-        TypedArray countryFlags = getResources().obtainTypedArray(R.array.country_flags);
-        List<Country> countries = new ArrayList<>();
-
-        if (countryNames.length == countryFlags.length()) {
-            for (int i = 0; i < countryNames.length; i++) {
-                Country country = new Country(countryNames[i], countryFlags.getResourceId(i, -1));
-                countries.add(country);
-            }
-        }
-        return countries;
     }
 }

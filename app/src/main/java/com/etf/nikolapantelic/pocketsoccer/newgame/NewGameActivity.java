@@ -17,33 +17,30 @@ public class NewGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_game);
 
         Button pvpButton = findViewById(R.id.button_vs_player);
-        Button pveButton = findViewById(R.id.button_vs_computer);
-
-        pveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickVsComputer(v);
-            }
-        });
-
         pvpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickVsPlayer(v);
             }
         });
+
+        Button pveButton = findViewById(R.id.button_vs_computer);
+        pveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickVsComputer(v);
+            }
+        });
     }
 
     public void onClickVsComputer(View view) {
         Intent intent = new Intent(this, PlayerSettupActivity.class);
-//        intent.putExtra("opponent_type", Game.OpponentType.PVE.toString());
         Game.opponent = Game.OpponentType.PVE;
         startActivity(intent);
     }
 
     public void onClickVsPlayer(View view) {
         Intent intent = new Intent(this, PlayerSettupActivity.class);
-//        intent.putExtra("opponent_type", Game.OpponentType.PVP.toString());
         Game.opponent = Game.OpponentType.PVP;
         startActivity(intent);
     }
