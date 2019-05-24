@@ -14,14 +14,12 @@ public class Ball {
     private float radius;
     private boolean moving;
 
-    private static final float TRACTION_FACTOR = 0.98f;
-
     public Ball(ImageView imageView, float radius) {
         this.imageView = imageView;
         this.radius = radius;
         moving = false;
-        velX = 0;
-        velY = 0;
+        velX = 0f;
+        velY = 0f;
     }
 
     public float calculateCenterX() {
@@ -29,31 +27,6 @@ public class Ball {
     }
     public float calculateCenterY() {
         return imageView.getY() + radius / 2;
-    }
-
-    public void move() {
-        if (velX == 0 && velY == 0) { // ako je brzina 0 ne racunaj nista
-            return;
-        } else {
-            float x = imageView.getX();
-            float y = imageView.getY();
-            velX *= TRACTION_FACTOR;
-            velY *= TRACTION_FACTOR;
-
-            if (x <= 0 || x >= windowWidth - radius) {
-                velX = -velX;
-                imageView.setX(x + 2 * velX);
-            } else {
-                imageView.setX(x + velX);
-            }
-
-            if (y <= 0 || y >= windowHeight - radius) {
-                velY = -velY;
-                imageView.setY(y + 2 * velY);
-            } else {
-                imageView.setY(y + velY);
-            }
-        }
     }
 
     public ImageView getImageView() {
@@ -90,9 +63,5 @@ public class Ball {
 
     public float getRadius() {
         return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
     }
 }
