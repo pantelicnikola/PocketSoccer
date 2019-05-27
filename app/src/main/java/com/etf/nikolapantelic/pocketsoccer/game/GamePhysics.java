@@ -52,7 +52,6 @@ public class GamePhysics {
     private static void forceStop(@NonNull Ball ball) {
         ball.setVelX(0);
         ball.setVelY(0);
-        ball.setMoving(false);
     }
 
     public static void checkCollisions() {
@@ -73,7 +72,48 @@ public class GamePhysics {
         return (distance < ball1.getRadius());
     }
 
-    private static void performCollision(Ball ball, Ball ball1) {
+    private static void performCollision(Ball ball1, Ball ball2) {
         System.out.println("collision!!!");
+
+        float resVelX1, resVelX2, resVelY1, resVelY2;
+
+        double x1 = ball1.calculateCenterX();
+        double y1 = ball1.calculateCenterY();
+        double x2 = ball2.calculateCenterX();
+        double y2 = ball2.calculateCenterY();
+
+
+        double teta1 = Math.atan2(ball1.getVelY(), ball1.getVelX());
+        double teta2 = Math.atan2(ball2.getVelY(), ball2.getVelX());
+        double phi = Math.atan((y2 - y1) / (x2 - x1));
+        double intVel1 = Math.sqrt(Math.pow(ball1.getVelY(), 2) + Math.pow(ball1.getVelX(), 2));
+        double intVel2 = Math.sqrt(Math.pow(ball2.getVelY(), 2) + Math.pow(ball2.getVelX(), 2));
+
+        if (!ball1.isMoving()) {
+            resVelX1 = (float) (intVel2 * Math.cos(teta2 - phi) * Math.cos(phi));
+            resVelY1 = (float) (intVel2 * Math.cos(teta2 - phi) * Math.sin(phi));
+
+            resVelX2 = (float) (intVel2 * Math.sin(teta2 - phi) * Math.sin(phi));
+            resVelY2 = (float) (intVel2 * Math.sin(teta2 - phi) * Math.cos(phi));
+
+        } else if (!ball2.isMoving()) {
+            resVelX1 = (float) (intVel1 * Math.sin(teta1 - phi) * Math.sin(phi));
+            resVelY1 = (float) (intVel1 * Math.sin(teta1 - phi) * Math.cos(phi));
+
+            resVelX2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.cos(phi));
+            resVelY2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.sin(phi));
+
+        } else {
+            resVelX1 = (float) (intVel2 * Math.cos(teta2 - phi) * Math.cos(phi) + intVel1 * Math.sin(teta1 - phi) * Math.sin(phi));
+            resVelY1 = (float) (intVel2 * Math.cos(teta2 - phi) * Math.sin(phi) + intVel1 * Math.sin(teta1 - phi) * Math.cos(phi));
+
+            resVelX2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.cos(phi) + intVel2 * Math.sin(teta2 - phi) * Math.sin(phi));
+            resVelY2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.sin(phi) + intVel2 * Math.sin(teta2 - phi) * Math.cos(phi));
+        }
+        ball1.setVelX(resVelX1);
+        ball1.setVelY(resVelY1);
+
+        ball2.setVelX(resVelX2);
+        ball2.setVelY(resVelY2);
     }
 }
