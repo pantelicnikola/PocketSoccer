@@ -4,11 +4,13 @@ public class Player {
     private String name;
     private Country country;
     private boolean isHuman;
+    private Ball[] balls;
 
     public Player(String name, Country country, boolean isHuman) {
         this.name = name;
         this.country = country;
         this.isHuman = isHuman;
+        balls = new Ball[3];
     }
 
     public String getName() {
@@ -21,5 +23,17 @@ public class Player {
 
     public boolean isHuman() {
         return isHuman;
+    }
+
+    public Ball[] getBalls() {
+        return balls;
+    }
+
+    public void setBalls(Ball[] balls) {
+        this.balls = balls;
+    }
+
+    public Ball getBall(int i) {
+        return balls[i];
     }
 }

@@ -18,7 +18,9 @@ class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
         ball.setVelX(velocityX/500); // ovo treba premestiti u GamePhysics
         ball.setVelY(velocityY/500);
         ball.setMoving(true);
-
+        GameLogic.changeTurn();
         return super.onFling(e1, e2, velocityX, velocityY);
     }
+
+
 }

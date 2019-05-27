@@ -50,12 +50,12 @@ public class GameActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupBalls() {
-        ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
-        ImageView t1p2 = findViewById(R.id.image_view_team1_player2);
-        ImageView t1p3 = findViewById(R.id.image_view_team1_player3);
-        ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
-        ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
-        ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
+        final ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
+        final ImageView t1p2 = findViewById(R.id.image_view_team1_player2);
+        final ImageView t1p3 = findViewById(R.id.image_view_team1_player3);
+        final ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
+        final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
+        final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
         ImageView ball = findViewById(R.id.image_view_ball);
 
         t1p1.setImageResource(Game.player1.getCountry().getFlag());
@@ -68,25 +68,39 @@ public class GameActivity extends AppCompatActivity {
 
         ball.setImageResource(R.drawable.footbal_default);
 
-        Game.balls[0] = new Ball(ball, getResources().getDimension(R.dimen.football_dimension));
-        Game.balls[1] = new Ball(t1p1, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.balls[2] = new Ball(t1p2, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.balls[3] = new Ball(t1p3, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.balls[4] = new Ball(t2p1, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.balls[5] = new Ball(t2p2, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.balls[6] = new Ball(t2p3, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.football = new Ball(ball, getResources().getDimension(R.dimen.football_dimension));
+        Game.player1.getBalls()[0] = new Ball(t1p1, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player1.getBalls()[1] = new Ball(t1p2, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player1.getBalls()[2] = new Ball(t1p3, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[0] = new Ball(t2p1, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[1] = new Ball(t2p2, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[2] = new Ball(t2p3, getResources().getDimension(R.dimen.player_ball_dimension));
 
-        for (int i = 1; i < Game.balls.length; i++) {
-            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(Game.balls[i]));
-            Game.balls[i].getImageView().setOnTouchListener(new View.OnTouchListener() {
+        for (Ball b : Game.player1.getBalls()) {
+            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b));
+            b.getImageView().setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
-                    return !gestureDetector.onTouchEvent(event);
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+
+
+            });
+        }
+
+        for (Ball b : Game.player2.getBalls()) { // ovo se ne radi u slucaju PvE
+            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b));
+            b.getImageView().setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
+                    gestureDetector.onTouchEvent(event);
+                    return true;
                 }
             });
         }
 
-        ball.post(new Runnable() {
+        Game.football.getImageView().post(new Runnable() {
             @Override
             public void run() {
                 Timer timer = new Timer();
@@ -96,8 +110,8 @@ public class GameActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                moveBalls();
                                 checkCollisions();
+                                moveBalls();
                             }
                         });
                     }

@@ -3,9 +3,10 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 import android.support.annotation.NonNull;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
+import com.etf.nikolapantelic.pocketsoccer.model.Game;
+
 import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowHeight;
 import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowWidth;
-import static com.etf.nikolapantelic.pocketsoccer.model.Game.balls;
 
 public class GamePhysics {
 
@@ -13,7 +14,7 @@ public class GamePhysics {
     private static final float MOVING_THRESHOLD = 1.0f;
 
     public static void moveBalls() {
-        for (Ball ball : balls) {
+        for (Ball ball : Game.getAllBalls()) {
             move(ball);
         }
     }
@@ -55,6 +56,7 @@ public class GamePhysics {
     }
 
     public static void checkCollisions() {
+        Ball[] balls = Game.getAllBalls();
         for (int i = 0; i < balls.length - 1; i++){
             for (int j = i + 1; j < balls.length; j++) {
                 if (balls[i].isMoving() || balls[j].isMoving()) {

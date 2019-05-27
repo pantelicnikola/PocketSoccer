@@ -1,12 +1,6 @@
 package com.etf.nikolapantelic.pocketsoccer.model;
 
-import android.content.Context;
 import android.widget.ImageView;
-
-import com.etf.nikolapantelic.pocketsoccer.R;
-
-import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowHeight;
-import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowWidth;
 
 public class Ball {
     private ImageView imageView;
@@ -20,6 +14,16 @@ public class Ball {
         moving = false;
         velX = 0f;
         velY = 0f;
+    }
+
+    public void enable() {
+        imageView.setEnabled(true);
+        imageView.setAlpha(255);
+    }
+
+    public void disable() {
+        imageView.setEnabled(false);
+        imageView.setAlpha(127);
     }
 
     public float calculateCenterX() {
