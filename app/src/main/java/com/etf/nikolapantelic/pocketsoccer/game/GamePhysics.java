@@ -11,7 +11,7 @@ import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowWidth;
 
 public class GamePhysics {
 
-    private static final float TRACTION_FACTOR = 0.98f;
+    private static final float TRACTION_FACTOR = 0.99f;
     private static final float MOVING_THRESHOLD = 1.0f;
 
     public static void moveBalls() {
@@ -22,8 +22,6 @@ public class GamePhysics {
 
     private static void move(@NonNull Ball ball) {
         if (ball.isMoving()) {
-            float x = ball.getImageView().getX();
-            float y = ball.getImageView().getY();
             ball.setVelX(ball.getVelX() * TRACTION_FACTOR);
             ball.setVelY(ball.getVelY() * TRACTION_FACTOR);
 
@@ -33,19 +31,25 @@ public class GamePhysics {
                 return;
             }
 
-            // check for left and right bounds
-            if (x < 0 || x > windowWidth - ball.getRadius()) {
-                ball.setVelX(-ball.getVelX());
-            }
 
-            // check for top and bottom bounds
-            if (y < 0 || y > windowHeight - ball.getRadius()) {
-                ball.setVelY(-ball.getVelY());
-            }
-
-            for (int i = 0; i < 20; i++){
+            for (int i = 0; i < 10; i++){
+                float x = ball.getImageView().getX();
+                float y = ball.getImageView().getY();
                 ball.getImageView().setX(x + ball.getVelX() / 10);
                 ball.getImageView().setY(y + ball.getVelY() / 10);
+                // check for left and right bounds
+                if (x < 0 || x > windowWidth - ball.getRadius()) {
+                    ball.getImageView().setX(x - ball.getVelX() / 10);
+                    ball.getImageView().setY(y - ball.getVelY() / 10);
+                    ball.setVelX(-ball.getVelX());
+                }
+
+                // check for top and bottom bounds
+                if (y < 0 || y > windowHeight - ball.getRadius()) {
+                    ball.getImageView().setX(x - ball.getVelX() / 10);
+                    ball.getImageView().setY(y - ball.getVelY() / 10);
+                    ball.setVelY(-ball.getVelY());
+                }
                 Ball b;
                 if ((b = getCollidingBall(ball)) != null) {
                     ball.getImageView().setX(x - ball.getVelX() / 10);
@@ -70,6 +74,10 @@ public class GamePhysics {
 //            ball.getImageView().setX(x + ball.getVelX() / 2);
 //            ball.getImageView().setY(y + ball.getVelY() / 2);
         }
+    }
+
+    private static void calculateWallCollision() {
+
     }
 
     private static void littleMove(@NonNull Ball ball) {
@@ -209,10 +217,10 @@ public class GamePhysics {
             resVelX2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.cos(phi) + intVel2 * Math.sin(teta2 - phi) * Math.sin(phi));
             resVelY2 = (float) (intVel1 * Math.cos(teta1 - phi) * Math.sin(phi) + intVel2 * Math.sin(teta2 - phi) * Math.cos(phi));
         }
-        ball1.setVelX(resVelX1);
-        ball1.setVelY(resVelY1);
+        ball1.setVelX(resVelX1 * 0.9f);
+        ball1.setVelY(resVelY1 * 0.9f);
 
-        ball2.setVelX(resVelX2);
-        ball2.setVelY(resVelY2);
+        ball2.setVelX(resVelX2 * 0.9f);
+        ball2.setVelY(resVelY2 * 0.9f);
     }
 }
