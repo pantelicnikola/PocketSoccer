@@ -6,12 +6,11 @@ public class Ball {
     private ImageView imageView;
     private float velX, velY;
     private float radius;
-//    private boolean moving;
+
 
     public Ball(ImageView imageView, float radius) {
         this.imageView = imageView;
         this.radius = radius;
-//        moving = false;
         velX = 0f;
         velY = 0f;
     }

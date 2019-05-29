@@ -1,6 +1,7 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
@@ -26,27 +27,73 @@ public class GamePhysics {
             ball.setVelX(ball.getVelX() * TRACTION_FACTOR);
             ball.setVelY(ball.getVelY() * TRACTION_FACTOR);
 
+            // check if ball should stop
+            if (Math.sqrt(Math.pow(ball.getVelX(), 2) + Math.pow(ball.getVelY(), 2)) < MOVING_THRESHOLD) {
+                forceStop(ball);
+                return;
+            }
+
             // check for left and right bounds
             if (x < 0 || x > windowWidth - ball.getRadius()) {
                 ball.setVelX(-ball.getVelX());
-                ball.getImageView().setX(x + 2 * ball.getVelX());
-            } else {
-                ball.getImageView().setX(x + ball.getVelX());
             }
 
             // check for top and bottom bounds
             if (y < 0 || y > windowHeight - ball.getRadius()) {
                 ball.setVelY(-ball.getVelY());
-                ball.getImageView().setY(y + 2 * ball.getVelY());
-            } else {
-                ball.getImageView().setY(y + ball.getVelY());
             }
 
-            // check if ball should stop
-            if (Math.sqrt(Math.pow(ball.getVelX(), 2) + Math.pow(ball.getVelY(), 2)) < MOVING_THRESHOLD) {
-                forceStop(ball);
+            for (int i = 0; i < 20; i++){
+                ball.getImageView().setX(x + ball.getVelX() / 10);
+                ball.getImageView().setY(y + ball.getVelY() / 10);
+                Ball b;
+                if ((b = getCollidingBall(ball)) != null) {
+                    ball.getImageView().setX(x - ball.getVelX() / 10);
+                    ball.getImageView().setY(y - ball.getVelY() / 10);
+//                    b.getImageView().setX(x + b.getVelX() / 10);
+//                    b.getImageView().setY(y + b.getVelY() / 10);
+
+                    calculateCollision(b, ball);
+//                    littleMove(ball);
+//                    littleMove(b);
+                    break;
+                }
             }
+//            Ball b;
+//            while ((b = getCollidingBall(ball)) != null) {
+//                calculateCollision(b, ball);
+//                littleMove(ball);
+//                littleMove(b);
+//            }
+
+
+//            ball.getImageView().setX(x + ball.getVelX() / 2);
+//            ball.getImageView().setY(y + ball.getVelY() / 2);
         }
+    }
+
+    private static void littleMove(@NonNull Ball ball) {
+        float x = ball.getImageView().getX();
+        float y = ball.getImageView().getY();
+
+        // check if ball should stop
+        if (Math.sqrt(Math.pow(ball.getVelX(), 2) + Math.pow(ball.getVelY(), 2)) < MOVING_THRESHOLD) {
+            forceStop(ball);
+            return;
+        }
+
+        // check for left and right bounds
+        if (x < 0 || x > windowWidth - ball.getRadius()) {
+            ball.setVelX(-ball.getVelX());
+        }
+
+        // check for top and bottom bounds
+        if (y < 0 || y > windowHeight - ball.getRadius()) {
+            ball.setVelY(-ball.getVelY());
+        }
+
+        ball.getImageView().setX(x + ball.getVelX() / 7);
+        ball.getImageView().setY(y + ball.getVelY() / 7);
     }
 
     private static void forceStop(@NonNull Ball ball) {
@@ -54,25 +101,77 @@ public class GamePhysics {
         ball.setVelY(0);
     }
 
-    public static void checkCollisions() {
+    public static void calculateCollisions() {
         Ball[] balls = Game.getAllBalls();
         for (int i = 0; i < balls.length - 1; i++){
             for (int j = i + 1; j < balls.length; j++) {
                 if (balls[i].isMoving() || balls[j].isMoving()) {
                     if (areColliding(balls[i], balls[j])) {
-                        performCollision(balls[i], balls[j]);
+                        calculateCollision(balls[i], balls[j]);
                     }
                 }
             }
         }
     }
 
-    private static boolean areColliding(@NonNull Ball ball1, @NonNull Ball ball2) {
-        float distance = (float) Math.sqrt(Math.pow((ball1.calculateCenterX() - ball2.calculateCenterX()),2) + Math.pow((ball1.calculateCenterY() - ball2.calculateCenterY()),2));
-        return (distance < ball1.getRadius());
+    public static boolean collisionsExist() {
+        Ball[] balls = Game.getAllBalls();
+        for (int i = 0; i < balls.length - 1; i++){
+            for (int j = i + 1; j < balls.length; j++) {
+                if (balls[i].isMoving() || balls[j].isMoving()) {
+                    if (areColliding(balls[i], balls[j])) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    private static void performCollision(Ball ball1, Ball ball2) {
+    @Nullable
+    private static Ball getCollidingBall(Ball ball) {
+        for (Ball b : Game.getAllBalls()) {
+            if (!b.equals(ball)) {
+                if (areColliding(b, ball)) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static boolean collides(Ball ball) {
+        for (Ball b : Game.getAllBalls()) {
+            if (!b.equals(ball)) {
+                if (areColliding(b, ball)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private static boolean areColliding(@NonNull Ball ball1, @NonNull Ball ball2) {
+        float distance = (float) Math.sqrt(Math.pow((ball1.calculateCenterX() - ball2.calculateCenterX()),2) + Math.pow((ball1.calculateCenterY() - ball2.calculateCenterY()),2));
+        float minDistance = ball1.getRadius() / 2 + ball2.getRadius() / 2;
+        return (distance < minDistance);
+    }
+
+//    public static void avoidCollisions() {
+//        for (Ball ball : Game.getAllBalls()) {
+//            Ball b = null;
+//            while ((b = getCollidingBall(ball)) != null) {
+//                while (areColliding(b, ball)) {
+//                    move(ball);
+//                    move(b);
+//                }
+//            }
+//        }
+//    }
+
+    private static void calculateCollision(@NonNull Ball ball1, @NonNull Ball ball2) {
         System.out.println("collision!!!");
 
         float resVelX1, resVelX2, resVelY1, resVelY2;

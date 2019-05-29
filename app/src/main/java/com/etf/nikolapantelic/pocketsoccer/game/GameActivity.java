@@ -19,7 +19,7 @@ import com.etf.nikolapantelic.pocketsoccer.model.Game;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.etf.nikolapantelic.pocketsoccer.game.GamePhysics.checkCollisions;
+import static com.etf.nikolapantelic.pocketsoccer.game.GamePhysics.calculateCollisions;
 import static com.etf.nikolapantelic.pocketsoccer.game.GamePhysics.moveBalls;
 
 public class GameActivity extends AppCompatActivity {
@@ -110,12 +110,15 @@ public class GameActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                checkCollisions();
                                 moveBalls();
+//                                calculateCollisions();
+//                                while (collisionsExist()) {
+//                                    avoidCollisions();
+//                                }
                             }
                         });
                     }
-                }, 0, 30);
+                }, 0, 10);
             }
         });
     }
