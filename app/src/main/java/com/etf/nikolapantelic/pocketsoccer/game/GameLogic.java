@@ -21,4 +21,8 @@ public class GameLogic {
             ball.disable();
         }
     }
+
+    public static boolean goalDetected() {
+        return false;
+    }
 }

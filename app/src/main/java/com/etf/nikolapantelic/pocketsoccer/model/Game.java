@@ -23,7 +23,7 @@ public class Game {
         goalsPlayer2 = 0;
 
         timeElapsed = 0;
-        currentTurn = Turn.PLAYER1;
+        currentTurn = Turn.PLAYER2;
         opponent = null;
 
     }

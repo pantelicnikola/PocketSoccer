@@ -99,6 +99,8 @@ public class GameActivity extends AppCompatActivity {
             });
         }
 
+        GameLogic.changeTurn();
+
         Game.football.getImageView().post(new Runnable() {
             @Override
             public void run() {
@@ -110,10 +112,6 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 moveBalls();
-//                                calculateCollisions();
-//                                while (collisionsExist()) {
-//                                    avoidCollisions();
-//                                }
                             }
                         });
                     }
