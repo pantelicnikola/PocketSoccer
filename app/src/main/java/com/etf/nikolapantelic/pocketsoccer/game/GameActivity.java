@@ -122,6 +122,8 @@ public class GameActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     setContentView(R.layout.activity_game);
+                                    setupBalls();
+
                                 }
                             }
                         });
