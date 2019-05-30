@@ -63,7 +63,7 @@ public class GamePhysics {
     }
 
 
-    private static void forceStop(@NonNull Ball ball) {
+    static void forceStop(@NonNull Ball ball) {
         ball.setVelX(0);
         ball.setVelY(0);
     }

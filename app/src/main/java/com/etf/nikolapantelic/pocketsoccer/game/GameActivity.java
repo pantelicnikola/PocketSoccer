@@ -16,11 +16,8 @@ import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.etf.nikolapantelic.pocketsoccer.game.GamePhysics.moveBalls;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -48,6 +45,7 @@ public class GameActivity extends AppCompatActivity {
 
         setupBalls();
         Game.reset(); // ako je continue preskociti
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -58,7 +56,12 @@ public class GameActivity extends AppCompatActivity {
         final ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
         final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
         final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
-        ImageView ball = findViewById(R.id.image_view_ball);
+        final ImageView ball = findViewById(R.id.image_view_ball);
+
+        final View upperLeftPost = findViewById(R.id.upperLeftPost);
+        final View upperRightPost = findViewById(R.id.upperRightPost);
+        final View lowerLeftPost = findViewById(R.id.lowerLeftPost);
+        final View lowerRightPost = findViewById(R.id.lowerRightPost);
 
         t1p1.setImageResource(Game.player1.getCountry().getFlag());
         t1p2.setImageResource(Game.player1.getCountry().getFlag());
@@ -110,7 +113,16 @@ public class GameActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                moveBalls();
+                                GamePhysics.moveBalls();
+                                if (GameLogic.goalOccurred(upperLeftPost.getX(), upperRightPost.getX())) {
+                                    try {
+                                        GameLogic.stopGame();
+                                        Thread.sleep(3000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    setContentView(R.layout.activity_game);
+                                }
                             }
                         });
                     }

@@ -1,6 +1,7 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.content.Context;
+import android.view.View;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
@@ -44,7 +45,25 @@ public class GameLogic {
         }
     }
 
-    public static boolean goalDetected() {
+    public static void stopGame() {
+        for (Ball b : Game.getAllBalls()) {
+            GamePhysics.forceStop(b);
+        }
+    }
+
+    public static boolean goalOccurred(float leftPostX, float rightPostX) {
+        float footballX = Game.football.calculateCenterX();
+        float footballY = Game.football.calculateCenterY();
+        if (footballX > leftPostX && footballX < rightPostX) {
+            if (footballY < 100) {
+                System.out.println("Gornji gooooool");
+                return true;
+            }
+            if (footballY > GameActivity.windowHeight - 100) {
+                System.out.println("Donji goooooool");
+                return false;
+            }
+        }
         return false;
     }
 }
