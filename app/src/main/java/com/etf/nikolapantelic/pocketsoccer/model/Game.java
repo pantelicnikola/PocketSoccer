@@ -1,5 +1,9 @@
 package com.etf.nikolapantelic.pocketsoccer.model;
 
+import android.support.annotation.NonNull;
+
+import com.etf.nikolapantelic.pocketsoccer.game.GameLogic;
+
 public class Game {
 
     public static Player player1;
@@ -9,22 +13,23 @@ public class Game {
     public static int goalsPlayer2;
 
     public static int timeElapsed; // time elapsed in game
-    public static Turn currentTurn; // whose turn is it?
+    public static Turn playing, waiting; // whose turn is it?
 
     public static Ball football;
 
     public static OpponentType opponent;
 
     public static void reset() {
-//        player1 = null;
-//        player2 = null;
 
         goalsPlayer1 = 0;
         goalsPlayer2 = 0;
 
         timeElapsed = 0;
-        currentTurn = Turn.PLAYER2;
+        playing = Turn.PLAYER1;
+        waiting = Turn.PLAYER2;
         opponent = null;
+
+        GameLogic.initialSetup();
 
     }
 
@@ -40,23 +45,17 @@ public class Game {
         return balls;
     }
 
-    public static Turn nextTurn() {
-        if (currentTurn.equals(Turn.PLAYER1)) {
-            return Turn.PLAYER2;
-        } else {
-            return Turn.PLAYER1;
-        }
-    }
-
     public static void changeTurn() {
-        if (currentTurn.equals(Turn.PLAYER1)) {
-            currentTurn = Turn.PLAYER2;
+        if (playing.equals(Turn.PLAYER1)) {
+            playing = Turn.PLAYER2;
+            waiting = Turn.PLAYER1;
         } else {
-            currentTurn = Turn.PLAYER1;
+            playing = Turn.PLAYER1;
+            waiting = Turn.PLAYER2;
         }
     }
 
-    public static Player getPlayerByTurn(Turn turn) {
+    public static Player getPlayerByTurn(@NonNull Turn turn) {
         if (turn.equals(Turn.PLAYER1)) {
             return player1;
         } else {
@@ -69,17 +68,7 @@ public class Game {
     }
 
     public enum Turn {
-        PLAYER1, PLAYER2;
-        public Turn next() {
-            if (currentTurn.equals(PLAYER1)) {
-                currentTurn = PLAYER2;
-                return PLAYER2;
-            } else {
-                currentTurn = PLAYER1;
-                return PLAYER1;
-            }
-        }
-
+        PLAYER1, PLAYER2
     }
 
 

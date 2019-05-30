@@ -16,6 +16,7 @@ import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,6 +27,7 @@ public class GameActivity extends AppCompatActivity {
     public static int windowHeight;
     public static int windowWidth;
     private Handler handler = new Handler();
+//    private GameLogic gameLogic;
 
 
     @Override
@@ -33,6 +35,7 @@ public class GameActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -43,8 +46,8 @@ public class GameActivity extends AppCompatActivity {
         windowWidth = size.x;
         windowHeight = size.y;
 
-        Game.reset(); // ako je continue preskociti
         setupBalls();
+        Game.reset(); // ako je continue preskociti
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -80,8 +83,7 @@ public class GameActivity extends AppCompatActivity {
             b.getImageView().setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
-                    gestureDetector.onTouchEvent(event);
-                    return true;
+                    return !gestureDetector.onTouchEvent(event);
                 }
 
 
@@ -93,13 +95,10 @@ public class GameActivity extends AppCompatActivity {
             b.getImageView().setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
-                    gestureDetector.onTouchEvent(event);
-                    return true;
+                    return !gestureDetector.onTouchEvent(event);
                 }
             });
         }
-
-        GameLogic.changeTurn();
 
         Game.football.getImageView().post(new Runnable() {
             @Override
