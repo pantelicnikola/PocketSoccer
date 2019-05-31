@@ -1,8 +1,6 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
-import android.content.Context;
-import android.view.View;
-
+import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
@@ -51,17 +49,19 @@ public class GameLogic {
         }
     }
 
-    public static boolean goalOccurred(float leftPostX, float rightPostX) {
+    public static boolean goalOccurred(float leftPostX, float rightPostX, float postHeight) {
         float footballX = Game.football.calculateCenterX();
         float footballY = Game.football.calculateCenterY();
+//        float leftPostX =  GameActivity.getContext().getResources().getFraction(R.fraction.left_post_bias, GameActivity.getWindowWidth(), 1);
+//        float rightPostX = GameActivity.getContext().getResources().getFraction(R.fraction.right_post_bias, GameActivity.getWindowWidth(), 1);
         if (footballX > leftPostX && footballX < rightPostX) {
-            if (footballY < 100) {
+            if (footballY < postHeight) {
                 System.out.println("Gornji gooooool");
                 return true;
             }
-            if (footballY > GameActivity.windowHeight - 100) {
+            if (footballY > GameActivity.getWindowHeight() - postHeight) {
                 System.out.println("Donji goooooool");
-                return false;
+                return true;
             }
         }
         return false;

@@ -1,6 +1,7 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +22,12 @@ import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
-    public static int windowHeight;
-    public static int windowWidth;
+    private static int windowHeight;
+    private static int windowWidth;
     private Handler handler = new Handler();
+    private static Context context;
 //    private GameLogic gameLogic;
+    private float leftPostX, rightPostX, postHeight;
 
 
     @Override
@@ -32,6 +35,9 @@ public class GameActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        context = this;
+
 
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -46,6 +52,39 @@ public class GameActivity extends AppCompatActivity {
         setupBalls();
         Game.reset(); // ako je continue preskociti
 
+        Game.football.getImageView().post(new Runnable() {
+            @Override
+            public void run() {
+
+                leftPostX = findViewById(R.id.lowerLeftPost).getX();
+                rightPostX = findViewById(R.id.lowerRightPost).getX();
+                postHeight = getResources().getDimension(R.dimen.post_height);
+
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                GamePhysics.moveBalls();
+                                if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
+                                    try {
+                                        GameLogic.stopGame();
+                                        Thread.sleep(3000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    setContentView(R.layout.activity_game);
+                                    setupBalls();
+                                }
+                            }
+                        });
+                    }
+                }, 0, 20);
+            }
+        });
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -57,11 +96,6 @@ public class GameActivity extends AppCompatActivity {
         final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
         final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
         final ImageView ball = findViewById(R.id.image_view_ball);
-
-        final View upperLeftPost = findViewById(R.id.upperLeftPost);
-        final View upperRightPost = findViewById(R.id.upperRightPost);
-        final View lowerLeftPost = findViewById(R.id.lowerLeftPost);
-        final View lowerRightPost = findViewById(R.id.lowerRightPost);
 
         t1p1.setImageResource(Game.player1.getCountry().getFlag());
         t1p2.setImageResource(Game.player1.getCountry().getFlag());
@@ -103,34 +137,19 @@ public class GameActivity extends AppCompatActivity {
             });
         }
 
-        Game.football.getImageView().post(new Runnable() {
-            @Override
-            public void run() {
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                GamePhysics.moveBalls();
-                                if (GameLogic.goalOccurred(upperLeftPost.getX(), upperRightPost.getX())) {
-                                    try {
-                                        GameLogic.stopGame();
-                                        Thread.sleep(3000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    setContentView(R.layout.activity_game);
-                                    setupBalls();
 
-                                }
-                            }
-                        });
-                    }
-                }, 0, 20);
-            }
-        });
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static int getWindowHeight() {
+        return windowHeight;
+    }
+
+    public static int getWindowWidth() {
+        return windowWidth;
     }
 }
 

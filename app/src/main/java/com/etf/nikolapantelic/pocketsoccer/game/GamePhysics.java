@@ -6,9 +6,6 @@ import android.support.annotation.Nullable;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
-import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowHeight;
-import static com.etf.nikolapantelic.pocketsoccer.game.GameActivity.windowWidth;
-
 public class GamePhysics {
 
     private static final float TRACTION_FACTOR = 0.99f;
@@ -39,14 +36,14 @@ public class GamePhysics {
                 ball.getImageView().setY(y + ball.getVelY() / 10);
 
                 // check for left and right bounds
-                if (x < 0 || x > windowWidth - ball.getRadius()) {
+                if (x < 0 || x > GameActivity.getWindowWidth() - ball.getRadius()) {
                     ball.getImageView().setX(x - ball.getVelX() / 10);
                     ball.getImageView().setY(y - ball.getVelY() / 10);
                     ball.setVelX(-ball.getVelX());
                 }
 
                 // check for top and bottom bounds
-                if (y < 0 || y > windowHeight - ball.getRadius()) {
+                if (y < 0 || y > GameActivity.getWindowHeight() - ball.getRadius()) {
                     ball.getImageView().setX(x - ball.getVelX() / 10);
                     ball.getImageView().setY(y - ball.getVelY() / 10);
                     ball.setVelY(-ball.getVelY());
@@ -62,11 +59,6 @@ public class GamePhysics {
         }
     }
 
-
-    static void forceStop(@NonNull Ball ball) {
-        ball.setVelX(0);
-        ball.setVelY(0);
-    }
 
     @Nullable
     private static Ball getCollidingBall(Ball ball) {
@@ -84,6 +76,11 @@ public class GamePhysics {
         float distance = (float) Math.sqrt(Math.pow((ball1.calculateCenterX() - ball2.calculateCenterX()),2) + Math.pow((ball1.calculateCenterY() - ball2.calculateCenterY()),2));
         float minDistance = ball1.getRadius() / 2 + ball2.getRadius() / 2;
         return (distance < minDistance);
+    }
+
+    static void forceStop(@NonNull Ball ball) {
+        ball.setVelX(0);
+        ball.setVelY(0);
     }
 
     private static void calculateCollision(@NonNull Ball ball1, @NonNull Ball ball2) {
