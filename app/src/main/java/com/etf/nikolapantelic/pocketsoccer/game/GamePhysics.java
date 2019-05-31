@@ -91,7 +91,7 @@ public class GamePhysics {
         double y1 = ball1.calculateCenterY();
         double x2 = ball2.calculateCenterX();
         double y2 = ball2.calculateCenterY();
-        double phi = Math.atan((y2 - y1) / (x2 - x1));
+        double phi = Math.atan2((y2 - y1) , (x2 - x1));
 
         double theta1 = Math.atan2(ball1.getVelY(), ball1.getVelX());
         double theta2 = Math.atan2(ball2.getVelY(), ball2.getVelX());

@@ -2,6 +2,7 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
@@ -25,9 +27,9 @@ public class GameActivity extends AppCompatActivity {
     private static int windowHeight;
     private static int windowWidth;
     private Handler handler = new Handler();
-    private static Context context;
 //    private GameLogic gameLogic;
     private float leftPostX, rightPostX, postHeight;
+    private TextView messageView;
 
 
     @Override
@@ -35,9 +37,6 @@ public class GameActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        context = this;
-
 
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -51,6 +50,7 @@ public class GameActivity extends AppCompatActivity {
 
         setupBalls();
         Game.reset(); // ako je continue preskociti
+        GameLogic.setTurn(Game.playing);
 
         Game.football.getImageView().post(new Runnable() {
             @Override
@@ -71,7 +71,10 @@ public class GameActivity extends AppCompatActivity {
                                 if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
                                     try {
                                         GameLogic.stopGame();
-                                        Thread.sleep(3000);
+                                        Thread.sleep(1000);
+//                                        message.show()
+                                        Thread.sleep(2000);
+//                                        message.hide()
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -84,7 +87,6 @@ public class GameActivity extends AppCompatActivity {
                 }, 0, 20);
             }
         });
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -136,12 +138,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     public static int getWindowHeight() {
@@ -152,6 +148,3 @@ public class GameActivity extends AppCompatActivity {
         return windowWidth;
     }
 }
-
-
-

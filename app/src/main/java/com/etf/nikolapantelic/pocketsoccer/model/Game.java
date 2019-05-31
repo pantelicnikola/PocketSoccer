@@ -29,8 +29,6 @@ public class Game {
         waiting = Turn.PLAYER2;
         opponent = null;
 
-        GameLogic.initialSetup();
-
     }
 
     public static Ball[] getAllBalls() {
@@ -45,13 +43,13 @@ public class Game {
         return balls;
     }
 
-    public static void changeTurn() {
-        if (playing.equals(Turn.PLAYER1)) {
-            playing = Turn.PLAYER2;
-            waiting = Turn.PLAYER1;
-        } else {
+    public static void setTurn(Turn turn) {
+        if (turn.equals(Turn.PLAYER1)) {
             playing = Turn.PLAYER1;
             waiting = Turn.PLAYER2;
+        } else {
+            playing = Turn.PLAYER2;
+            waiting = Turn.PLAYER1;
         }
     }
 
@@ -70,7 +68,4 @@ public class Game {
     public enum Turn {
         PLAYER1, PLAYER2
     }
-
-
-
 }
