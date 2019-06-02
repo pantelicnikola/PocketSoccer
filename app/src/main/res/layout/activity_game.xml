@@ -149,4 +149,35 @@
         app:layout_constraintHorizontal_bias="@fraction/right_post_fraction"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--<fragment-->
+        <!--android:id="@+id/fragment_message"-->
+        <!--android:name="com.etf.nikolapantelic.pocketsoccer.game.MessageFragment"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginStart="32dp"-->
+        <!--android:layout_marginLeft="32dp"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--android:layout_marginEnd="32dp"-->
+        <!--android:layout_marginRight="32dp"-->
+        <!--android:layout_marginBottom="32dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
 </android.support.constraint.ConstraintLayout>

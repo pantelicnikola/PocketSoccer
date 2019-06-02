@@ -1,19 +1,20 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
+
+import android.support.v4.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
@@ -22,14 +23,15 @@ import com.etf.nikolapantelic.pocketsoccer.model.Game;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends FragmentActivity {
 
     private static int windowHeight;
     private static int windowWidth;
     private Handler handler = new Handler();
 //    private GameLogic gameLogic;
     private float leftPostX, rightPostX, postHeight;
-    private TextView messageView;
+    private MessageFragment messageFragment;
+
 
 
     @Override
@@ -38,7 +40,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -51,6 +53,8 @@ public class GameActivity extends AppCompatActivity {
         setupBalls();
         Game.reset(); // ako je continue preskociti
         GameLogic.setTurn(Game.playing);
+
+        messageFragment = new MessageFragment();
 
         Game.football.getImageView().post(new Runnable() {
             @Override
@@ -68,18 +72,26 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 GamePhysics.moveBalls();
+                                System.out.println("move");
                                 if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
                                     try {
                                         GameLogic.stopGame();
-                                        Thread.sleep(1000);
-//                                        message.show()
-                                        Thread.sleep(2000);
-//                                        message.hide()
-                                    } catch (InterruptedException e) {
+                                        System.out.println("show");
+                                        showMessage(GameLogic.getResultMessage());
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                hideMessage();
+                                                System.out.println("hide");
+                                            }
+                                        }, 3000);
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                     setContentView(R.layout.activity_game);
                                     setupBalls();
+                                    System.out.println("settup balls");
+
                                 }
                             }
                         });
@@ -124,8 +136,6 @@ public class GameActivity extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
                     return !gestureDetector.onTouchEvent(event);
                 }
-
-
             });
         }
 
@@ -138,6 +148,21 @@ public class GameActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void showMessage(String message) {
+        messageFragment.setMessage(message);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().add(R.id.fragment_container, messageFragment);
+//        messageFragment.setText(message);
+        fragmentTransaction.commit();
+
+    }
+
+    private void hideMessage() {
+        getSupportFragmentManager()
+                .beginTransaction().
+                remove(messageFragment).commit();
     }
 
     public static int getWindowHeight() {
