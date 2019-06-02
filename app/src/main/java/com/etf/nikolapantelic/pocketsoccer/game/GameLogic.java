@@ -9,6 +9,7 @@ import java.util.TimerTask;
 public class GameLogic {
 
     private static Timer turnTimer = new Timer();
+    private static Timer gameTimer = new Timer();
 
     public static void changeTurn() {
         setTurn(Game.waiting);
@@ -39,9 +40,12 @@ public class GameLogic {
     }
 
     public static void stopGame() {
+        stopTurnTimer();
         for (Ball b : Game.getAllBalls()) {
             GamePhysics.forceStop(b);
         }
+        deactivatePlayer(Game.Turn.PLAYER1);
+        deactivatePlayer(Game.Turn.PLAYER2);
     }
 
     public static boolean goalOccurred(float leftPostX, float rightPostX, float postHeight) {
@@ -51,11 +55,15 @@ public class GameLogic {
 //        float rightPostX1 = GameActivity.getContext().getResources().getFraction(R.fraction.right_post_fraction, GameActivity.getWindowWidth(), 1);
         if (footballX > leftPostX && footballX < rightPostX) {
             if (footballY < postHeight) {
+                stopGame();
                 Game.goalsPlayer1++;
+                GameLogic.setTurn(Game.Turn.PLAYER2);
                 return true;
             }
             if (footballY > GameActivity.getWindowHeight() - postHeight) {
+                stopGame();
                 Game.goalsPlayer2++;
+                GameLogic.setTurn(Game.Turn.PLAYER1);
                 return true;
             }
         }

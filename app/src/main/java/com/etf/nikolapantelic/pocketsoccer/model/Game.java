@@ -6,6 +6,8 @@ import com.etf.nikolapantelic.pocketsoccer.game.GameLogic;
 
 public class Game {
 
+    public static boolean paused;
+
     public static Player player1;
     public static Player player2;
 
@@ -20,6 +22,8 @@ public class Game {
     public static OpponentType opponent;
 
     public static void reset() {
+
+        paused = false;
 
         goalsPlayer1 = 0;
         goalsPlayer2 = 0;
@@ -59,6 +63,14 @@ public class Game {
         } else {
             return player2;
         }
+    }
+
+    public static void pause() {
+        paused = true;
+    }
+
+    public static void resume() {
+        paused = false;
     }
 
     public enum OpponentType {

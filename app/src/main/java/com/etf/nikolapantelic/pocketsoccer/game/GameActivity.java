@@ -27,7 +27,7 @@ public class GameActivity extends FragmentActivity {
 
     private static int windowHeight;
     private static int windowWidth;
-    private Handler handler = new Handler();
+    private Handler handler;
 //    private GameLogic gameLogic;
     private float leftPostX, rightPostX, postHeight;
     private MessageFragment messageFragment;
@@ -46,52 +46,38 @@ public class GameActivity extends FragmentActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-
         windowWidth = size.x;
         windowHeight = size.y;
 
-        setupBalls();
         Game.reset(); // ako je continue preskociti
-        GameLogic.setTurn(Game.playing);
+        setupBalls();
+//        GameLogic.setTurn(Game.playing);
 
         messageFragment = new MessageFragment();
+        handler = new Handler();
 
         Game.football.getImageView().post(new Runnable() {
             @Override
             public void run() {
-
                 leftPostX = findViewById(R.id.lowerLeftPost).getX();
                 rightPostX = findViewById(R.id.lowerRightPost).getX();
                 postHeight = getResources().getDimension(R.dimen.post_height);
-
-                Timer timer = new Timer();
+                final Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                GamePhysics.moveBalls();
-                                System.out.println("move");
-                                if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
-                                    try {
-                                        GameLogic.stopGame();
-                                        System.out.println("show");
+                                if (!Game.paused) {
+                                    GamePhysics.moveBalls();
+                                    if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
+                                        Game.pause();
                                         showMessage(GameLogic.getResultMessage());
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                hideMessage();
-                                                System.out.println("hide");
-                                            }
-                                        }, 3000);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                        setContentView(R.layout.activity_game);
+                                        setupBalls();
+                                        Game.resume();
                                     }
-                                    setContentView(R.layout.activity_game);
-                                    setupBalls();
-                                    System.out.println("settup balls");
-
                                 }
                             }
                         });
@@ -129,6 +115,8 @@ public class GameActivity extends FragmentActivity {
         Game.player2.getBalls()[1] = new Ball(t2p2, getResources().getDimension(R.dimen.player_ball_dimension));
         Game.player2.getBalls()[2] = new Ball(t2p3, getResources().getDimension(R.dimen.player_ball_dimension));
 
+        GameLogic.setTurn(Game.playing);
+
         for (Ball b : Game.player1.getBalls()) {
             final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b));
             b.getImageView().setOnTouchListener(new View.OnTouchListener() {
@@ -152,17 +140,20 @@ public class GameActivity extends FragmentActivity {
 
     private void showMessage(String message) {
         messageFragment.setMessage(message);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().add(R.id.fragment_container, messageFragment);
-//        messageFragment.setText(message);
-        fragmentTransaction.commit();
 
-    }
-
-    private void hideMessage() {
         getSupportFragmentManager()
-                .beginTransaction().
-                remove(messageFragment).commit();
+                .beginTransaction()
+                .add(R.id.fragment_container, messageFragment)
+                .commit();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager()
+                        .beginTransaction().
+                        remove(messageFragment).commit();
+            }
+        }, 3000);
     }
 
     public static int getWindowHeight() {
