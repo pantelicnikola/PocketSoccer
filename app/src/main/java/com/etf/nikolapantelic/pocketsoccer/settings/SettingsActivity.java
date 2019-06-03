@@ -66,23 +66,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private SettingsModel loadModel(SharedPreferences preferences) {
         SettingsModel settingsModel;
-        if(preferences.contains("initialized")){
-            settingsModel = new SettingsModel(
-                    SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null)),
-                    SettingsModel.GameSpeed.valueOf(preferences.getString(getString(R.string.key_game_speed), null)),
-                    SettingsModel.EndType.valueOf(preferences.getString(getString(R.string.key_end_type), null))
-            );
-        } else {
-            settingsModel = new SettingsModel();
-            SharedPreferences.Editor editor = preferences.edit();
-
-            editor.putBoolean("initialized", true);
-            editor.putString(getString(R.string.key_field_type), settingsModel.getFieldType().toString());
-            editor.putString(getString(R.string.key_game_speed), settingsModel.getGameSpeed().toString());
-            editor.putString(getString(R.string.key_end_type), settingsModel.getEndType().toString());
-
-            editor.apply();
-        }
+        settingsModel = new SettingsModel(
+                SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null)),
+                SettingsModel.GameSpeed.valueOf(preferences.getString(getString(R.string.key_game_speed), null)),
+                SettingsModel.EndType.valueOf(preferences.getString(getString(R.string.key_end_type), null))
+        );
         return settingsModel;
     }
 
