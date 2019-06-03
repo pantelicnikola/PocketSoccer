@@ -5,5 +5,20 @@
         <item>@drawable/algeria</item>
         <item>@drawable/finland</item>
         <item>@drawable/curacao</item>
+        <item>@drawable/spain</item>
+        <item>@drawable/mexico</item>
+        <item>@drawable/australia</item>
+        <item>@drawable/india</item>
+        <item>@drawable/liberia</item>
+        <item>@drawable/nauru</item>
+        <item>@drawable/belgium</item>
+        <item>@drawable/greece</item>
+        <item>@drawable/philippines</item>
+        <item>@drawable/taiwan</item>
+        <item>@drawable/nicaragua</item>
+        <item>@drawable/norway</item>
+        <item>@drawable/tanzania</item>
+
+
     </array>
 </resources>
