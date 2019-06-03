@@ -40,6 +40,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_field_type_green">Green</string>
+    <string name="settings_field_type_yellow">Yellow</string>
+    <string name="settings_field_type_grey">Grey</string>
+    <string name="settings_game_speed_slow">Slow</string>
+    <string name="settings_game_speed_medium">Medium</string>
+    <string name="settings_game_speed_fast">Fast</string>
+    <string name="settings_end_game_goals">Goals</string>
+    <string name="settings_end_game_time">Time</string>
+    <string name="settings_choose_field">Choose Field Type</string>
+    <string name="settings_choose_speed">Choose Game Speed</string>
+    <string name="settings_choose_end">Choose End Game</string>
 
 
 </resources>

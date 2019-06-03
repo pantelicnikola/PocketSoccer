@@ -2,13 +2,10 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
-import android.support.v4.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -25,14 +22,12 @@ import java.util.TimerTask;
 
 public class GameActivity extends FragmentActivity {
 
-    private static int windowHeight;
-    private static int windowWidth;
+    private static int WINDOW_HEIGHT;
+    private static int WINDOW_WIDTH;
     private Handler handler;
-//    private GameLogic gameLogic;
-    private float leftPostX, rightPostX, postHeight;
     private MessageFragment messageFragment;
-
-
+    private float leftPostX, rightPostX, postHeight;
+    //    private GameLogic gameLogic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +35,13 @@ public class GameActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-//        getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        windowWidth = size.x;
-        windowHeight = size.y;
+        WINDOW_WIDTH = size.x;
+        WINDOW_HEIGHT = size.y;
 
         Game.reset(); // ako je continue preskociti
         setupBalls();
@@ -150,17 +144,17 @@ public class GameActivity extends FragmentActivity {
             @Override
             public void run() {
                 getSupportFragmentManager()
-                        .beginTransaction().
-                        remove(messageFragment).commit();
+                        .beginTransaction()
+                        .remove(messageFragment).commit();
             }
         }, 3000);
     }
 
     public static int getWindowHeight() {
-        return windowHeight;
+        return WINDOW_HEIGHT;
     }
 
     public static int getWindowWidth() {
-        return windowWidth;
+        return WINDOW_WIDTH;
     }
 }
