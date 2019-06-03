@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">PocketSoccer</string>
+    <string name="game_preferences">GamePreferences</string>
+
+    <string name="key_field_type">field_type</string>
+    <string name="key_game_speed">game_speed</string>
+    <string name="key_end_type">end_type</string>
 
     <!--Main Activity-->
     <string name="main_continue">Continue</string>

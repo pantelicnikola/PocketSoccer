@@ -1,8 +1,10 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
+import android.content.SharedPreferences;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 
 class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
@@ -15,6 +17,10 @@ class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+//        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getResources().getString(R.string.game_preferences), MODE_PRIVATE);
+
+
         ball.setVelX(velocityX/400); // ovo treba premestiti u GamePhysics
         ball.setVelY(velocityY/400);
         GameLogic.changeTurn();

@@ -2,6 +2,8 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +45,8 @@ public class GameActivity extends FragmentActivity {
         display.getSize(size);
         WINDOW_WIDTH = size.x;
         WINDOW_HEIGHT = size.y;
+
+        setFieldColor();
 
         Game.reset(); // ako je continue preskociti
         setupBalls();
@@ -79,6 +84,23 @@ public class GameActivity extends FragmentActivity {
                 }, 0, 20);
             }
         });
+    }
+
+    private void setFieldColor() {
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
+        SettingsModel.FieldType fieldType = SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null));
+        View layout = getWindow().getDecorView();
+        switch (fieldType) {
+            case GREEN:
+                layout.setBackgroundColor(Color.GREEN);
+                break;
+            case YELLOW:
+                layout.setBackgroundColor(Color.YELLOW);
+                break;
+            case GREY:
+                layout.setBackgroundColor(Color.GRAY);
+                break;
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

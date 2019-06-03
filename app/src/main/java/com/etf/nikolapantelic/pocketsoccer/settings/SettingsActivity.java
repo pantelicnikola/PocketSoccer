@@ -13,10 +13,6 @@ public class SettingsActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SettingsModel model;
 
-    private final String KEY_FIELD_TYPE = "field_type";
-    private final String KEY_GAME_SPEED = "game_speed";
-    private final String KEY_END_TYPE = "end_type";
-
     private RadioGroup fieldTypeGroup;
     private RadioGroup gameSpeedGroup;
     private RadioGroup endGameGroup;
@@ -31,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         gameSpeedGroup = findViewById(R.id.radioGroupSpeed);
         endGameGroup = findViewById(R.id.radioGroupEnd);
 
-        preferences = getApplicationContext().getSharedPreferences("GamePreferences", MODE_PRIVATE);
+        preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
         model = loadModel(preferences);
 
         unloadModel(model);
@@ -40,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(KEY_FIELD_TYPE, getFieldType(checkedId).toString());
+                editor.putString(getString(R.string.key_field_type), getFieldType(checkedId).toString());
                 editor.apply();
                 model = loadModel(preferences);
             }
@@ -50,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(KEY_GAME_SPEED, getGameSpeed(checkedId).toString());
+                editor.putString(getString(R.string.key_game_speed), getGameSpeed(checkedId).toString());
                 editor.apply();
                 model = loadModel(preferences);
             }
@@ -60,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(KEY_END_TYPE, getEndType(checkedId).toString());
+                editor.putString(getString(R.string.key_end_type), getEndType(checkedId).toString());
                 editor.apply();
                 model = loadModel(preferences);
             }
@@ -72,18 +68,18 @@ public class SettingsActivity extends AppCompatActivity {
         SettingsModel settingsModel;
         if(preferences.contains("initialized")){
             settingsModel = new SettingsModel(
-                    SettingsModel.FieldType.valueOf(preferences.getString(KEY_FIELD_TYPE, null)),
-                    SettingsModel.GameSpeed.valueOf(preferences.getString(KEY_GAME_SPEED, null)),
-                    SettingsModel.EndType.valueOf(preferences.getString(KEY_END_TYPE, null))
+                    SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null)),
+                    SettingsModel.GameSpeed.valueOf(preferences.getString(getString(R.string.key_game_speed), null)),
+                    SettingsModel.EndType.valueOf(preferences.getString(getString(R.string.key_end_type), null))
             );
         } else {
             settingsModel = new SettingsModel();
             SharedPreferences.Editor editor = preferences.edit();
 
             editor.putBoolean("initialized", true);
-            editor.putString(KEY_FIELD_TYPE, settingsModel.getFieldType().toString());
-            editor.putString(KEY_GAME_SPEED, settingsModel.getGameSpeed().toString());
-            editor.putString(KEY_END_TYPE, settingsModel.getEndType().toString());
+            editor.putString(getString(R.string.key_field_type), settingsModel.getFieldType().toString());
+            editor.putString(getString(R.string.key_game_speed), settingsModel.getGameSpeed().toString());
+            editor.putString(getString(R.string.key_end_type), settingsModel.getEndType().toString());
 
             editor.apply();
         }
