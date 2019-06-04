@@ -6,6 +6,7 @@ public class Ball {
     private ImageView imageView;
     private float velX, velY;
     private float radius;
+    private boolean hitTop, hitBottom;
 
 
     public Ball(ImageView imageView, float radius) {
@@ -62,5 +63,21 @@ public class Ball {
 
     public float getRadius() {
         return radius;
+    }
+
+    public boolean isHitTop() {
+        return hitTop;
+    }
+
+    public void setHitTop(boolean hitTop) {
+        this.hitTop = hitTop;
+    }
+
+    public boolean isHitBottom() {
+        return hitBottom;
+    }
+
+    public void setHitBottom(boolean hitBottom) {
+        this.hitBottom = hitBottom;
     }
 }

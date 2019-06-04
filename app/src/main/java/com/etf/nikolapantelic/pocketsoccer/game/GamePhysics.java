@@ -14,6 +14,7 @@ public class GamePhysics {
     private static final float MOVING_THRESHOLD = 1.0f;
     private static final float BOUNCE_FACTOR = 0.9f;
 
+
     public static void moveBalls() {
         for (Ball ball : Game.getAllBalls()) {
             move(ball);
@@ -21,6 +22,8 @@ public class GamePhysics {
     }
 
     private static void move(@NonNull Ball ball) {
+        ball.setHitTop(false);
+        ball.setHitBottom(false);
         if (ball.isMoving()) {
             ball.setVelX(ball.getVelX() * TRACTION_FACTOR);
             ball.setVelY(ball.getVelY() * TRACTION_FACTOR);
@@ -46,6 +49,15 @@ public class GamePhysics {
 
                 // check for top and bottom bounds
                 if (y < 0 || y > GameActivity.getWindowHeight() - ball.getRadius()) {
+
+                    if (y < 0) {
+                        ball.setHitTop(true);
+                        System.out.println("HIT TOP");
+                    } else {
+                        ball.setHitBottom(true);
+                        System.out.println("HIT BOTTOM");
+                    }
+
                     ball.getImageView().setX(x - ball.getVelX() / 10);
                     ball.getImageView().setY(y - ball.getVelY() / 10);
                     ball.setVelY(-ball.getVelY());
