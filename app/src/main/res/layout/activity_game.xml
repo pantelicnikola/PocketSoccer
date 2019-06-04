@@ -6,6 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".game.GameActivity">
 
+    <View
+        android:id="@+id/central_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/centerCircle"
+        android:layout_width="@dimen/center_circle_dimension"
+        android:layout_height="0dp"
+        android:src="@drawable/center_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/centerPoint"
+        android:layout_width="@dimen/center_point_dimension"
+        android:layout_height="0dp"
+        android:src="@drawable/center_point"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/image_view_team2_player1"
         android:layout_width="@dimen/player_ball_dimension"
@@ -107,7 +139,7 @@
         android:layout_height="@dimen/post_height"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="#825555"
+        android:background="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@fraction/left_post_fraction"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +151,7 @@
         android:layout_height="@dimen/post_height"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="#825555"
+        android:background="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@fraction/right_post_fraction"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +163,7 @@
         android:layout_height="@dimen/post_height"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="#825555"
+        android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@fraction/left_post_fraction"
@@ -143,7 +175,7 @@
         android:layout_height="@dimen/post_height"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="#825555"
+        android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@fraction/right_post_fraction"
@@ -164,20 +196,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<fragment-->
-        <!--android:id="@+id/fragment_message"-->
-        <!--android:name="com.etf.nikolapantelic.pocketsoccer.game.MessageFragment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginStart="32dp"-->
-        <!--android:layout_marginLeft="32dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:layout_marginEnd="32dp"-->
-        <!--android:layout_marginRight="32dp"-->
-        <!--android:layout_marginBottom="32dp"-->
+
+    <!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:shape="oval"-->
         <!--app:layout_constraintBottom_toBottomOf="parent"-->
         <!--app:layout_constraintEnd_toEndOf="parent"-->
         <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+        <!--app:layout_constraintTop_toTopOf="parent">-->
+        <!--<stroke-->
+            <!--android:width="1dp"-->
+            <!--android:color="#78d9ff"/>-->
+    <!--</shape>-->
+    <!--<shape-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:shape="oval"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent">-->
+
+        <!--<solid-->
+            <!--android:color="#000000"/>-->
+
+        <!--<size-->
+            <!--android:width="120dp"-->
+            <!--android:height="120dp"/>-->
+    <!--</shape>-->
 
 </android.support.constraint.ConstraintLayout>

@@ -52,10 +52,8 @@ public class GamePhysics {
 
                     if (y < 0) {
                         ball.setHitTop(true);
-                        System.out.println("HIT TOP");
                     } else {
                         ball.setHitBottom(true);
-                        System.out.println("HIT BOTTOM");
                     }
 
                     ball.getImageView().setX(x - ball.getVelX() / 10);

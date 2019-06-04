@@ -91,13 +91,13 @@ public class GameActivity extends FragmentActivity {
         View layout = getWindow().getDecorView();
         switch (settingsModel.getFieldType()) {
             case GREEN:
-                layout.setBackgroundColor(Color.GREEN);
+                layout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
                 break;
             case YELLOW:
-                layout.setBackgroundColor(Color.YELLOW);
+                layout.setBackground(getResources().getDrawable(R.drawable.parquet_field, null));
                 break;
             case GREY:
-                layout.setBackgroundColor(Color.GRAY);
+                layout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
                 break;
         }
 //        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
