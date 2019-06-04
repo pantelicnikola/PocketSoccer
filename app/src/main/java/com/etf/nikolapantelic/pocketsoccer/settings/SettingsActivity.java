@@ -3,8 +3,11 @@ package com.etf.nikolapantelic.pocketsoccer.settings;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.EndType;
+import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.FieldType;
+import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.GameSpeed;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 
@@ -17,7 +20,6 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioGroup gameSpeedGroup;
     private RadioGroup endGameGroup;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,53 +30,47 @@ public class SettingsActivity extends AppCompatActivity {
         endGameGroup = findViewById(R.id.radioGroupEnd);
 
         preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
-        model = loadModel(preferences);
-
-        unloadModel(model);
+        model = SettingsModel.getInstance(this);
+        populateView(model);
 
         fieldTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                FieldType fieldType = getFieldType(checkedId);
+                model.setFieldType(fieldType);
+
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_field_type), getFieldType(checkedId).toString());
+                editor.putString(getString(R.string.key_field_type), fieldType.toString());
                 editor.apply();
-                model = loadModel(preferences);
             }
         });
 
         gameSpeedGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                GameSpeed gameSpeed = getGameSpeed(checkedId);
+                model.setGameSpeed(gameSpeed);
+
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_game_speed), getGameSpeed(checkedId).toString());
+                editor.putString(getString(R.string.key_game_speed), gameSpeed.toString());
                 editor.apply();
-                model = loadModel(preferences);
             }
         });
 
         endGameGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                EndType endType = getEndType(checkedId);
+                model.setEndType(endType);
+
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_end_type), getEndType(checkedId).toString());
+                editor.putString(getString(R.string.key_end_type), endType.toString());
                 editor.apply();
-                model = loadModel(preferences);
             }
         });
-
     }
 
-    private SettingsModel loadModel(SharedPreferences preferences) {
-        SettingsModel settingsModel;
-        settingsModel = new SettingsModel(
-                SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null)),
-                SettingsModel.GameSpeed.valueOf(preferences.getString(getString(R.string.key_game_speed), null)),
-                SettingsModel.EndType.valueOf(preferences.getString(getString(R.string.key_end_type), null))
-        );
-        return settingsModel;
-    }
-
-    private void unloadModel(SettingsModel model) {
+    private void populateView(SettingsModel model) {
         switch (model.getFieldType()) {
             case GREEN:
                 fieldTypeGroup.check(R.id.radioButtonGreen);
@@ -109,41 +105,38 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private SettingsModel.FieldType getFieldType(int id) {
+    private FieldType getFieldType(int id) {
         switch (id) {
             case R.id.radioButtonGreen:
-                return SettingsModel.FieldType.GREEN;
+                return FieldType.GREEN;
             case R.id.radioButtonYellow:
-                return SettingsModel.FieldType.YELLOW;
+                return FieldType.YELLOW;
             case R.id.radioButtonGrey:
-                return SettingsModel.FieldType.GREY;
-            default:
-                return null;
+                return FieldType.GREY;
         }
+        return null;
     }
 
-    private SettingsModel.GameSpeed getGameSpeed(int id) {
+    private GameSpeed getGameSpeed(int id) {
         switch (id) {
             case R.id.radioButtonSlow:
-                return SettingsModel.GameSpeed.SLOW;
+                return GameSpeed.SLOW;
             case R.id.radioButtonMedium:
-                return SettingsModel.GameSpeed.MEDIUM;
+                return GameSpeed.MEDIUM;
             case R.id.radioButtonFast:
-                return SettingsModel.GameSpeed.FAST;
-            default:
-                return null;
+                return GameSpeed.FAST;
         }
+        return null;
     }
 
-    private SettingsModel.EndType getEndType(int id) {
+    private EndType getEndType(int id) {
         switch (id) {
             case R.id.radioButtonGoals:
-                return SettingsModel.EndType.GOALS;
+                return EndType.GOALS;
             case R.id.radioButtonTime:
-                return SettingsModel.EndType.TIME;
-            default:
-                return null;
+                return EndType.TIME;
         }
+        return null;
     }
 
 

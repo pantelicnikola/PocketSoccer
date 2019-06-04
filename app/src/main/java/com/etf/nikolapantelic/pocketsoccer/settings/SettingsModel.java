@@ -1,6 +1,12 @@
 package com.etf.nikolapantelic.pocketsoccer.settings;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+
+import com.etf.nikolapantelic.pocketsoccer.R;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsModel {
 
@@ -29,6 +35,16 @@ public class SettingsModel {
 
     public SettingsModel(SharedPreferences preferences) {
 
+    }
+
+    public static SettingsModel getInstance(Context context) {
+        Resources resources = context.getResources();
+        SharedPreferences preferences = context.getSharedPreferences(resources.getString(R.string.game_preferences), MODE_PRIVATE);
+        return new SettingsModel(
+                FieldType.valueOf(preferences.getString(resources.getString(R.string.key_field_type), null)),
+                GameSpeed.valueOf(preferences.getString(resources.getString(R.string.key_game_speed), null)),
+                EndType.valueOf(preferences.getString(resources.getString(R.string.key_end_type), null))
+        );
     }
 
     public FieldType getFieldType() {

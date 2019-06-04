@@ -87,10 +87,9 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void setFieldColor() {
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
-        SettingsModel.FieldType fieldType = SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null));
+        SettingsModel settingsModel = SettingsModel.getInstance(this);
         View layout = getWindow().getDecorView();
-        switch (fieldType) {
+        switch (settingsModel.getFieldType()) {
             case GREEN:
                 layout.setBackgroundColor(Color.GREEN);
                 break;
@@ -101,6 +100,20 @@ public class GameActivity extends FragmentActivity {
                 layout.setBackgroundColor(Color.GRAY);
                 break;
         }
+//        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
+//        SettingsModel.FieldType fieldType = SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null));
+//        View layout = getWindow().getDecorView();
+//        switch (fieldType) {
+//            case GREEN:
+//                layout.setBackgroundColor(Color.GREEN);
+//                break;
+//            case YELLOW:
+//                layout.setBackgroundColor(Color.YELLOW);
+//                break;
+//            case GREY:
+//                layout.setBackgroundColor(Color.GRAY);
+//                break;
+//        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -134,7 +147,7 @@ public class GameActivity extends FragmentActivity {
         GameLogic.setTurn(Game.playing);
 
         for (Ball b : Game.player1.getBalls()) {
-            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b));
+            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b, this));
             b.getImageView().setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView
@@ -144,7 +157,7 @@ public class GameActivity extends FragmentActivity {
         }
 
         for (Ball b : Game.player2.getBalls()) { // ovo se ne radi u slucaju PvE
-            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b));
+            final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b, this));
             b.getImageView().setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) { // ovo se poziva kada kliknes na imageView

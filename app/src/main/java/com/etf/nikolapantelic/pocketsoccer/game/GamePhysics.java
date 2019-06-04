@@ -1,10 +1,12 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel;
 
 public class GamePhysics {
 
@@ -58,7 +60,6 @@ public class GamePhysics {
             }
         }
     }
-
 
     @Nullable
     private static Ball getCollidingBall(Ball ball) {
