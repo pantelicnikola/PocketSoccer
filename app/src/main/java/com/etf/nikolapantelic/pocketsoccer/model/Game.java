@@ -2,8 +2,6 @@ package com.etf.nikolapantelic.pocketsoccer.model;
 
 import android.support.annotation.NonNull;
 
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
-
 public class Game {
 
     public static boolean paused;

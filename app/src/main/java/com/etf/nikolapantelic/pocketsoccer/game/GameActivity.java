@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -36,6 +37,17 @@ public class GameActivity extends FragmentActivity {
     private TextView textViewTimer;
     private CountDownTimer gameTimer;
 
+    private ImageView t1p1ImageView;
+    private ImageView t1p2ImageView;
+    private ImageView t1p3ImageView;
+    private ImageView t2p1ImageView;
+    private ImageView t2p2ImageView;
+    private ImageView t2p3ImageView;
+    private ImageView ballImageView;
+
+    private ConstraintSet constraintSet;
+    private ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,6 +55,8 @@ public class GameActivity extends FragmentActivity {
         setContentView(R.layout.activity_game);
 
         textViewTimer = findViewById(R.id.textViewTimer);
+        constraintLayout = findViewById(R.id.root);
+        constraintSet = new ConstraintSet();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -64,6 +78,7 @@ public class GameActivity extends FragmentActivity {
         Game.football.getImageView().post(new Runnable() {
             @Override
             public void run() {
+                saveBallParams();
                 leftPostX = findViewById(R.id.lowerLeftPost).getX();
                 rightPostX = findViewById(R.id.lowerRightPost).getX();
                 final Timer timer = new Timer();
@@ -81,7 +96,7 @@ public class GameActivity extends FragmentActivity {
                                         showMessage(GameLogic.getResultMessage());
 //                                        setContentView(R.layout.activity_game);
 //                                        setupBalls();
-                                        resetBalls();
+                                        restoreBallPositions();
                                         Game.resume();
                                     }
                                     if (GameLogic.isGameOver()) {
@@ -129,76 +144,40 @@ public class GameActivity extends FragmentActivity {
         }
     }
 
-    private void resetBalls() {
+    private void restoreBallPositions() {
+        constraintSet.applyTo(constraintLayout);
+    }
 
-        ConstraintLayout.LayoutParams parameter;
-
-        final ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
-        final ImageView t1p2 = findViewById(R.id.image_view_team1_player2);
-        final ImageView t1p3 = findViewById(R.id.image_view_team1_player3);
-        final ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
-        final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
-        final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
-        final ImageView ball = findViewById(R.id.image_view_ball);
-
-        parameter =  (ConstraintLayout.LayoutParams) t1p1.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t1p1.setLayoutParams(parameter);
-
-        parameter =  (ConstraintLayout.LayoutParams) t1p2.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t1p2.setLayoutParams(parameter);
-
-        parameter =  (ConstraintLayout.LayoutParams) t1p3.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t1p3.setLayoutParams(parameter);
-
-        parameter =  (ConstraintLayout.LayoutParams) t2p1.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t2p1.setLayoutParams(parameter);
-
-        parameter =  (ConstraintLayout.LayoutParams) t2p2.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t2p2.setLayoutParams(parameter);
-
-        parameter =  (ConstraintLayout.LayoutParams) t2p3.getLayoutParams();
-        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
-        t2p3.setLayoutParams(parameter);
+    private void saveBallParams() {
+        constraintSet.clone(constraintLayout);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupBalls() {
-        final ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
-        final ImageView t1p2 = findViewById(R.id.image_view_team1_player2);
-        final ImageView t1p3 = findViewById(R.id.image_view_team1_player3);
-        final ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
-        final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
-        final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
-        final ImageView ball = findViewById(R.id.image_view_ball);
 
-        /////////// TEST /////////////
+        t1p1ImageView = findViewById(R.id.image_view_team1_player1);
+        t1p2ImageView = findViewById(R.id.image_view_team1_player2);
+        t1p3ImageView = findViewById(R.id.image_view_team1_player3);
+        t2p1ImageView = findViewById(R.id.image_view_team2_player1);
+        t2p2ImageView = findViewById(R.id.image_view_team2_player2);
+        t2p3ImageView = findViewById(R.id.image_view_team2_player3);
+        ballImageView = findViewById(R.id.image_view_ball);
 
+        t1p1ImageView.setImageResource(Game.player1.getCountry().getFlag());
+        t1p2ImageView.setImageResource(Game.player1.getCountry().getFlag());
+        t1p3ImageView.setImageResource(Game.player1.getCountry().getFlag());
+        t2p1ImageView.setImageResource(Game.player2.getCountry().getFlag());
+        t2p2ImageView.setImageResource(Game.player2.getCountry().getFlag());
+        t2p3ImageView.setImageResource(Game.player2.getCountry().getFlag());
+        ballImageView.setImageResource(R.drawable.footbal_default);
 
-
-        /////////// TEST /////////////
-
-        t1p1.setImageResource(Game.player1.getCountry().getFlag());
-        t1p2.setImageResource(Game.player1.getCountry().getFlag());
-        t1p3.setImageResource(Game.player1.getCountry().getFlag());
-
-        t2p1.setImageResource(Game.player2.getCountry().getFlag());
-        t2p2.setImageResource(Game.player2.getCountry().getFlag());
-        t2p3.setImageResource(Game.player2.getCountry().getFlag());
-
-        ball.setImageResource(R.drawable.footbal_default);
-
-        Game.football = new Ball(ball, getResources().getDimension(R.dimen.football_dimension));
-        Game.player1.getBalls()[0] = new Ball(t1p1, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.player1.getBalls()[1] = new Ball(t1p2, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.player1.getBalls()[2] = new Ball(t1p3, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.player2.getBalls()[0] = new Ball(t2p1, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.player2.getBalls()[1] = new Ball(t2p2, getResources().getDimension(R.dimen.player_ball_dimension));
-        Game.player2.getBalls()[2] = new Ball(t2p3, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.football = new Ball(ballImageView, getResources().getDimension(R.dimen.football_dimension));
+        Game.player1.getBalls()[0] = new Ball(t1p1ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player1.getBalls()[1] = new Ball(t1p2ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player1.getBalls()[2] = new Ball(t1p3ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[0] = new Ball(t2p1ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[1] = new Ball(t2p2ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
+        Game.player2.getBalls()[2] = new Ball(t2p3ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
 
         GameLogic.setTurn(Game.playing);
 
