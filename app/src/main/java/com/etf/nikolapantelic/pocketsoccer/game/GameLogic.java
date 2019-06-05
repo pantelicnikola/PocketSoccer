@@ -13,8 +13,8 @@ import java.util.TimerTask;
 public class GameLogic {
 
     private static Timer turnTimer = new Timer();
-    private static Timer gameTimer = new Timer();
     private static GamePreferencesHelper.EndType endType;
+    public static boolean timerFinished = false;
 
     public static void changeTurn() {
         setTurn(Game.waiting);
@@ -93,12 +93,25 @@ public class GameLogic {
 
         if (endType.equals(GamePreferencesHelper.EndType.GOALS)) {
             if (Game.goalsPlayer1 == 10 || Game.goalsPlayer2 == 10) {
+                if (Game.goalsPlayer1 == 10) {
+                    Game.winner = Game.Turn.PLAYER1;
+                } else {
+                    Game.winner = Game.Turn.PLAYER2;
+                }
                 return true;
             }
         } else {
-
+            if (timerFinished) {
+                if (Game.goalsPlayer1 > Game.goalsPlayer2) {
+                    Game.winner = Game.Turn.PLAYER1;
+                } else if (Game.goalsPlayer1 < Game.goalsPlayer2) {
+                    Game.winner = Game.Turn.PLAYER2;
+                } else {
+                    // DRAW
+                }
+                return true;
+            }
         }
-
         return false;
     }
 }

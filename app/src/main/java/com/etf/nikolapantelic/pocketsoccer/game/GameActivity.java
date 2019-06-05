@@ -37,14 +37,6 @@ public class GameActivity extends FragmentActivity {
     private TextView textViewTimer;
     private CountDownTimer gameTimer;
 
-    private ImageView t1p1ImageView;
-    private ImageView t1p2ImageView;
-    private ImageView t1p3ImageView;
-    private ImageView t2p1ImageView;
-    private ImageView t2p2ImageView;
-    private ImageView t2p3ImageView;
-    private ImageView ballImageView;
-
     private ConstraintSet constraintSet;
     private ConstraintLayout constraintLayout;
 
@@ -101,6 +93,7 @@ public class GameActivity extends FragmentActivity {
                                     }
                                     if (GameLogic.isGameOver()) {
 //                                        Game.stop();
+                                        System.out.println("GOTOVICA");
                                     }
                                 }
                             }
@@ -117,12 +110,14 @@ public class GameActivity extends FragmentActivity {
             gameTimer = new CountDownTimer(300000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-                    textViewTimer.setText(millisUntilFinished / 60000 + " : " + millisUntilFinished / 1000 % 60);
+                    String timeString = millisUntilFinished / 60000 + " : " + millisUntilFinished / 1000 % 60;
+                    textViewTimer.setText(timeString);
                 }
 
                 public void onFinish() {
-                    textViewTimer.setText("done!");
+                    GameLogic.timerFinished = true;
                 }
+
             }.start();
         } else {
             textViewTimer.setVisibility(View.INVISIBLE);
@@ -130,16 +125,15 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void setFieldColor() {
-        View layout = getWindow().getDecorView();
         switch (GamePreferencesHelper.getInstance(this).getFieldType()) {
             case GREEN:
-                layout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
                 break;
             case YELLOW:
-                layout.setBackground(getResources().getDrawable(R.drawable.parquet_field, null));
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.parquet_field, null));
                 break;
             case GREY:
-                layout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
                 break;
         }
     }
@@ -155,13 +149,13 @@ public class GameActivity extends FragmentActivity {
     @SuppressLint("ClickableViewAccessibility")
     private void setupBalls() {
 
-        t1p1ImageView = findViewById(R.id.image_view_team1_player1);
-        t1p2ImageView = findViewById(R.id.image_view_team1_player2);
-        t1p3ImageView = findViewById(R.id.image_view_team1_player3);
-        t2p1ImageView = findViewById(R.id.image_view_team2_player1);
-        t2p2ImageView = findViewById(R.id.image_view_team2_player2);
-        t2p3ImageView = findViewById(R.id.image_view_team2_player3);
-        ballImageView = findViewById(R.id.image_view_ball);
+        ImageView t1p1ImageView = findViewById(R.id.image_view_team1_player1);
+        ImageView t1p2ImageView = findViewById(R.id.image_view_team1_player2);
+        ImageView t1p3ImageView = findViewById(R.id.image_view_team1_player3);
+        ImageView t2p1ImageView = findViewById(R.id.image_view_team2_player1);
+        ImageView t2p2ImageView = findViewById(R.id.image_view_team2_player2);
+        ImageView t2p3ImageView = findViewById(R.id.image_view_team2_player3);
+        ImageView ballImageView = findViewById(R.id.image_view_ball);
 
         t1p1ImageView.setImageResource(Game.player1.getCountry().getFlag());
         t1p2ImageView.setImageResource(Game.player1.getCountry().getFlag());
@@ -180,6 +174,7 @@ public class GameActivity extends FragmentActivity {
         Game.player2.getBalls()[2] = new Ball(t2p3ImageView, getResources().getDimension(R.dimen.player_ball_dimension));
 
         GameLogic.setTurn(Game.playing);
+        GameLogic.timerFinished = false;
 
         for (Ball b : Game.player1.getBalls()) {
             final GestureDetector gestureDetector = new GestureDetector(this, new CustomGestureDetector(b, this));

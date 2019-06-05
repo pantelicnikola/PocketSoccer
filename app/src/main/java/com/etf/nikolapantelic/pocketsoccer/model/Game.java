@@ -12,8 +12,8 @@ public class Game {
     public static int goalsPlayer1;
     public static int goalsPlayer2;
 
-    public static int timeElapsed; // time elapsed in game
     public static Turn playing, waiting; // whose turn is it?
+    public static Turn winner;
 
     public static Ball football;
 
@@ -26,7 +26,8 @@ public class Game {
         goalsPlayer1 = 0;
         goalsPlayer2 = 0;
 
-        timeElapsed = 0;
+        winner = null;
+
         playing = Turn.PLAYER1;
         waiting = Turn.PLAYER2;
         opponent = null;
