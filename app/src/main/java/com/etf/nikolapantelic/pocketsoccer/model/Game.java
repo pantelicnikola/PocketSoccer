@@ -2,7 +2,7 @@ package com.etf.nikolapantelic.pocketsoccer.model;
 
 import android.support.annotation.NonNull;
 
-import com.etf.nikolapantelic.pocketsoccer.game.GameLogic;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 public class Game {
 
@@ -20,6 +20,7 @@ public class Game {
     public static Ball football;
 
     public static OpponentType opponent;
+    public static GamePreferencesHelper gamePreferencesHelper;
 
     public static void reset() {
 

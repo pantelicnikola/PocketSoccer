@@ -2,8 +2,6 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -18,7 +16,6 @@ import android.widget.ImageView;
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,12 +67,15 @@ public class GameActivity extends FragmentActivity {
                             public void run() {
                                 if (!Game.paused) {
                                     GamePhysics.moveBalls();
-                                    if (GameLogic.goalOccurred(leftPostX, rightPostX, postHeight)) {
+                                    if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
                                         Game.pause();
                                         showMessage(GameLogic.getResultMessage());
                                         setContentView(R.layout.activity_game);
                                         setupBalls();
                                         Game.resume();
+                                    }
+                                    if (GameLogic.isGameOver()) {
+//                                        Game.stop();
                                     }
                                 }
                             }
@@ -87,9 +87,8 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void setFieldColor() {
-        SettingsModel settingsModel = SettingsModel.getInstance(this);
         View layout = getWindow().getDecorView();
-        switch (settingsModel.getFieldType()) {
+        switch (Game.gamePreferencesHelper.getFieldType()) {
             case GREEN:
                 layout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
                 break;
@@ -100,20 +99,6 @@ public class GameActivity extends FragmentActivity {
                 layout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
                 break;
         }
-//        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
-//        SettingsModel.FieldType fieldType = SettingsModel.FieldType.valueOf(preferences.getString(getString(R.string.key_field_type), null));
-//        View layout = getWindow().getDecorView();
-//        switch (fieldType) {
-//            case GREEN:
-//                layout.setBackgroundColor(Color.GREEN);
-//                break;
-//            case YELLOW:
-//                layout.setBackgroundColor(Color.YELLOW);
-//                break;
-//            case GREY:
-//                layout.setBackgroundColor(Color.GRAY);
-//                break;
-//        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -1,20 +1,18 @@
 package com.etf.nikolapantelic.pocketsoccer.settings;
 
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 
-import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.EndType;
-import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.FieldType;
-import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel.GameSpeed;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.EndType;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.FieldType;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.GameSpeed;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private SharedPreferences preferences;
-    private SettingsModel model;
+    private GamePreferencesHelper model;
 
     private RadioGroup fieldTypeGroup;
     private RadioGroup gameSpeedGroup;
@@ -29,48 +27,32 @@ public class SettingsActivity extends AppCompatActivity {
         gameSpeedGroup = findViewById(R.id.radioGroupSpeed);
         endGameGroup = findViewById(R.id.radioGroupEnd);
 
-        preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
-        model = SettingsModel.getInstance(this);
+        model = GamePreferencesHelper.getInstance(this);
         populateView(model);
 
         fieldTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                FieldType fieldType = getFieldType(checkedId);
-                model.setFieldType(fieldType);
-
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_field_type), fieldType.toString());
-                editor.apply();
+                model.setFieldType(getFieldType(checkedId));
             }
         });
 
         gameSpeedGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                GameSpeed gameSpeed = getGameSpeed(checkedId);
-                model.setGameSpeed(gameSpeed);
-
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_game_speed), gameSpeed.toString());
-                editor.apply();
+                model.setGameSpeed(getGameSpeed(checkedId));
             }
         });
 
         endGameGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                EndType endType = getEndType(checkedId);
-                model.setEndType(endType);
-
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.key_end_type), endType.toString());
-                editor.apply();
+                model.setEndType(getEndType(checkedId));
             }
         });
     }
 
-    private void populateView(SettingsModel model) {
+    private void populateView(GamePreferencesHelper model) {
         switch (model.getFieldType()) {
             case GREEN:
                 fieldTypeGroup.check(R.id.radioButtonGreen);

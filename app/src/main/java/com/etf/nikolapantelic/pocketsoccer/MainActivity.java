@@ -1,7 +1,6 @@
 package com.etf.nikolapantelic.pocketsoccer;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.widget.Button;
 
 import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.SettingsActivity;
-import com.etf.nikolapantelic.pocketsoccer.settings.SettingsModel;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         Button scoresButton = findViewById(R.id.button_scores);
         Button settingsButton = findViewById(R.id.button_settings);
 
-        initGamePreferences();
+        // init game preferences
+        GamePreferencesHelper.getInstance(this);
 
         if (savedInstanceState == null) {
             continueButton.setEnabled(false);
@@ -51,18 +51,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initGamePreferences() {
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(getString(R.string.game_preferences), MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        if (!preferences.contains("initialized")) {
-            editor.putBoolean("initialized", true);
-            SettingsModel settingsModel = new SettingsModel();
-            editor.putString(getString(R.string.key_field_type), settingsModel.getFieldType().toString());
-            editor.putString(getString(R.string.key_game_speed), settingsModel.getGameSpeed().toString());
-            editor.putString(getString(R.string.key_end_type), settingsModel.getEndType().toString());
-            editor.apply();
-        }
-    }
+
 
     public void onClickContinue(View view) {
         // nesto

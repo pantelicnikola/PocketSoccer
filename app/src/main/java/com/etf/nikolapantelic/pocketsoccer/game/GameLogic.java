@@ -1,5 +1,6 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
+import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
@@ -23,10 +24,6 @@ public class GameLogic {
         }, 5000, 5000);
     }
 
-    public static void stopTurnTimer() {
-        turnTimer.cancel();
-    }
-
     private static void activatePlayer(Game.Turn turn) {
         for (Ball ball : Game.getPlayerByTurn(turn).getBalls()) {
             ball.enable();
@@ -40,7 +37,7 @@ public class GameLogic {
     }
 
     public static void stopGame() {
-        stopTurnTimer();
+        turnTimer.cancel();
         for (Ball b : Game.getAllBalls()) {
             GamePhysics.forceStop(b);
         }
@@ -48,10 +45,9 @@ public class GameLogic {
         deactivatePlayer(Game.Turn.PLAYER2);
     }
 
-    public static boolean goalOccurred(float leftPostX, float rightPostX, float postHeight) {
+    public static boolean goalOccurred(float leftPostX, float rightPostX) {
         Ball football = Game.football;
         float footballX = football.calculateCenterX();
-        float footballY = football.calculateCenterY();
 //        float leftPostX1 =  GameActivity.getContext().getResources().getFraction(R.fraction.left_post_fraction, GameActivity.getWindowWidth(), 1);
 //        float rightPostX1 = GameActivity.getContext().getResources().getFraction(R.fraction.right_post_fraction, GameActivity.getWindowWidth(), 1);
         if (footballX > leftPostX && footballX < rightPostX) {
@@ -71,16 +67,6 @@ public class GameLogic {
         return false;
     }
 
-//    public static void goalScored(@NonNull Game.Turn player) {
-//        if (player.equals(Game.Turn.PLAYER1)) {
-//            Game.goalsPlayer1++;
-//            GameLogic.setTurn(Game.Turn.PLAYER2);
-//        } else {
-//            Game.goalsPlayer2++;
-//            GameLogic.setTurn(Game.Turn.PLAYER1);
-//        }
-//    }
-
     public static void setTurn(Game.Turn player) {
         Game.setTurn(player);
         deactivatePlayer(Game.waiting);
@@ -89,5 +75,12 @@ public class GameLogic {
 
     public static String getResultMessage() {
         return Game.goalsPlayer1 + " - " + Game.goalsPlayer2;
+    }
+
+    public static boolean isGameOver() {
+
+
+
+        return false;
     }
 }
