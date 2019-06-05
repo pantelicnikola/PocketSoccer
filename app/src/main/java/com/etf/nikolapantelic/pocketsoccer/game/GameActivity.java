@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
@@ -77,8 +79,9 @@ public class GameActivity extends FragmentActivity {
 
                                         Game.pause();
                                         showMessage(GameLogic.getResultMessage());
-                                        setContentView(R.layout.activity_game);
-                                        setupBalls();
+//                                        setContentView(R.layout.activity_game);
+//                                        setupBalls();
+                                        resetBalls();
                                         Game.resume();
                                     }
                                     if (GameLogic.isGameOver()) {
@@ -126,6 +129,43 @@ public class GameActivity extends FragmentActivity {
         }
     }
 
+    private void resetBalls() {
+
+        ConstraintLayout.LayoutParams parameter;
+
+        final ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
+        final ImageView t1p2 = findViewById(R.id.image_view_team1_player2);
+        final ImageView t1p3 = findViewById(R.id.image_view_team1_player3);
+        final ImageView t2p1 = findViewById(R.id.image_view_team2_player1);
+        final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
+        final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
+        final ImageView ball = findViewById(R.id.image_view_ball);
+
+        parameter =  (ConstraintLayout.LayoutParams) t1p1.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t1p1.setLayoutParams(parameter);
+
+        parameter =  (ConstraintLayout.LayoutParams) t1p2.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t1p2.setLayoutParams(parameter);
+
+        parameter =  (ConstraintLayout.LayoutParams) t1p3.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t1p3.setLayoutParams(parameter);
+
+        parameter =  (ConstraintLayout.LayoutParams) t2p1.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t2p1.setLayoutParams(parameter);
+
+        parameter =  (ConstraintLayout.LayoutParams) t2p2.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t2p2.setLayoutParams(parameter);
+
+        parameter =  (ConstraintLayout.LayoutParams) t2p3.getLayoutParams();
+        parameter.setMargins(parameter.leftMargin, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin); // left, top, right, bottom
+        t2p3.setLayoutParams(parameter);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void setupBalls() {
         final ImageView t1p1 = findViewById(R.id.image_view_team1_player1);
@@ -135,6 +175,12 @@ public class GameActivity extends FragmentActivity {
         final ImageView t2p2 = findViewById(R.id.image_view_team2_player2);
         final ImageView t2p3 = findViewById(R.id.image_view_team2_player3);
         final ImageView ball = findViewById(R.id.image_view_ball);
+
+        /////////// TEST /////////////
+
+
+
+        /////////// TEST /////////////
 
         t1p1.setImageResource(Game.player1.getCountry().getFlag());
         t1p2.setImageResource(Game.player1.getCountry().getFlag());
