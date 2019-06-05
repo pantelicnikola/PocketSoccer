@@ -1,8 +1,11 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
+import android.os.CountDownTimer;
+
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,6 +14,7 @@ public class GameLogic {
 
     private static Timer turnTimer = new Timer();
     private static Timer gameTimer = new Timer();
+    private static GamePreferencesHelper.EndType endType;
 
     public static void changeTurn() {
         setTurn(Game.waiting);
@@ -67,6 +71,14 @@ public class GameLogic {
         return false;
     }
 
+    public static void setEndType(GamePreferencesHelper.EndType endType) {
+        GameLogic.endType = endType;
+    }
+
+    public static GamePreferencesHelper.EndType getEndType() {
+        return endType;
+    }
+
     public static void setTurn(Game.Turn player) {
         Game.setTurn(player);
         deactivatePlayer(Game.waiting);
@@ -79,7 +91,13 @@ public class GameLogic {
 
     public static boolean isGameOver() {
 
+        if (endType.equals(GamePreferencesHelper.EndType.GOALS)) {
+            if (Game.goalsPlayer1 == 10 || Game.goalsPlayer2 == 10) {
+                return true;
+            }
+        } else {
 
+        }
 
         return false;
     }

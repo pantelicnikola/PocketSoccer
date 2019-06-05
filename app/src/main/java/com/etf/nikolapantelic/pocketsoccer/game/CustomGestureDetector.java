@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
@@ -21,7 +22,7 @@ class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
         float speedDenominator;
-        switch (Game.gamePreferencesHelper.getGameSpeed()) {
+        switch (GamePreferencesHelper.getInstance(context).getGameSpeed()) {
             case SLOW:
                 speedDenominator = 600;
                 break;

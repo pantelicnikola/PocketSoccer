@@ -3,6 +3,7 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 import android.annotation.SuppressLint;
 
 import android.graphics.Point;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,14 +29,18 @@ public class GameActivity extends FragmentActivity {
     private static int WINDOW_WIDTH;
     private Handler handler;
     private MessageFragment messageFragment;
-    private float leftPostX, rightPostX, postHeight;
+    private float leftPostX, rightPostX;
     //    private GameLogic gameLogic;
+    private TextView textViewTimer;
+    private CountDownTimer gameTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        textViewTimer = findViewById(R.id.textViewTimer);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -44,10 +51,10 @@ public class GameActivity extends FragmentActivity {
         WINDOW_HEIGHT = size.y;
 
         setFieldColor();
+        setGameEnd();
 
         Game.reset(); // ako je continue preskociti
         setupBalls();
-//        GameLogic.setTurn(Game.playing);
 
         messageFragment = new MessageFragment();
         handler = new Handler();
@@ -57,7 +64,6 @@ public class GameActivity extends FragmentActivity {
             public void run() {
                 leftPostX = findViewById(R.id.lowerLeftPost).getX();
                 rightPostX = findViewById(R.id.lowerRightPost).getX();
-                postHeight = getResources().getDimension(R.dimen.post_height);
                 final Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -68,6 +74,7 @@ public class GameActivity extends FragmentActivity {
                                 if (!Game.paused) {
                                     GamePhysics.moveBalls();
                                     if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
+
                                         Game.pause();
                                         showMessage(GameLogic.getResultMessage());
                                         setContentView(R.layout.activity_game);
@@ -86,9 +93,27 @@ public class GameActivity extends FragmentActivity {
         });
     }
 
+    private void setGameEnd() {
+        GameLogic.setEndType(GamePreferencesHelper.getInstance(this).getEndType());
+        if (GameLogic.getEndType().equals(GamePreferencesHelper.EndType.TIME)) {
+            gameTimer = new CountDownTimer(300000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    textViewTimer.setText(millisUntilFinished / 60000 + " : " + millisUntilFinished / 1000 % 60);
+                }
+
+                public void onFinish() {
+                    textViewTimer.setText("done!");
+                }
+            }.start();
+        } else {
+            textViewTimer.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void setFieldColor() {
         View layout = getWindow().getDecorView();
-        switch (Game.gamePreferencesHelper.getFieldType()) {
+        switch (GamePreferencesHelper.getInstance(this).getFieldType()) {
             case GREEN:
                 layout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
                 break;

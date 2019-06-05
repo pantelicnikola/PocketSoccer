@@ -34,7 +34,7 @@ public class NewGameActivity extends AppCompatActivity {
         });
 
         //new Game
-        Game.gamePreferencesHelper = GamePreferencesHelper.getInstance(this);
+//        Game.gamePreferencesHelper = GamePreferencesHelper.getInstance(this);
     }
 
     public void onClickVsComputer(View view) {

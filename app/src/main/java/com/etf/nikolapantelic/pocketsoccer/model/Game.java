@@ -20,7 +20,6 @@ public class Game {
     public static Ball football;
 
     public static OpponentType opponent;
-    public static GamePreferencesHelper gamePreferencesHelper;
 
     public static void reset() {
 
