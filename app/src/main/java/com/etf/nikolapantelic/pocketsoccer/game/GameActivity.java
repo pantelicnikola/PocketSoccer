@@ -94,18 +94,18 @@ public class GameActivity extends FragmentActivity {
                                         restoreBallPositions();
                                         Game.resume();
                                     }
-                                }
-                                if (GameLogic.isGameOver()) {
-                                    Game.pause();
+                                    if (GameLogic.isGameOver()) {
+                                        timer.cancel();
+                                        timer.purge();
+//                                        Game.pause();
 //                                        Game.finished = true;
-//                                        GameLogic.stopGame();
-                                    showMessage(GameLogic.getWinnerMessage());
-                                    moveToScores();
-                                    Game.resume();
-                                    timer.cancel();
-                                    timer.purge();
-                                    // save the result
-                                    // go to scores activity
+                                        GameLogic.stopGame();
+                                        showMessage(GameLogic.getWinnerMessage());
+                                        moveToScores();
+//                                        Game.resume();
+                                        // save the result
+                                        // go to scores activity
+                                    }
                                 }
                             }
                         });
@@ -167,31 +167,27 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void showMessage(String message) {
-        messageFragment = new MessageFragment();
-        messageFragment.setMessage(message);
+//        messageFragment = new MessageFragment();
+//        messageFragment.setMessage(message);
+//
+//        final FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//        fragmentManager
+//            .beginTransaction()
+//            .add(R.id.fragment_container, messageFragment)
+//            .commit();
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                fragmentManager
+//                        .beginTransaction()
+//                        .remove(messageFragment).commit();
+//                finish();
+//            }
+//        }, 3000);
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        while (!fragmentManager.getFragments().isEmpty()) {
-            int i = 0;
-        }
-
-        fragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, messageFragment)
-            .commit();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fragmentManager
-                        .beginTransaction()
-                        .remove(messageFragment).commit();
-                finish();
-            }
-        }, 3000);
-
-//        new LongOperation().execute(message);
+        new LongOperation().execute(message);
 
     }
 
@@ -247,7 +243,7 @@ public class GameActivity extends FragmentActivity {
                 startActivity(start);
                 finish();
             }
-        }, 7000);
+        }, 8000);
     }
 
     public static int getWindowHeight() {
