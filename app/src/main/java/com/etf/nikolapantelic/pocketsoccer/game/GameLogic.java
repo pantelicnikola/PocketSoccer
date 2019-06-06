@@ -92,26 +92,36 @@ public class GameLogic {
     public static boolean isGameOver() {
 
         if (endType.equals(GamePreferencesHelper.EndType.GOALS)) {
-            if (Game.goalsPlayer1 == 10 || Game.goalsPlayer2 == 10) {
-                if (Game.goalsPlayer1 == 10) {
-                    Game.winner = Game.Turn.PLAYER1;
+            if (Game.goalsPlayer1 == 1 || Game.goalsPlayer2 == 1) {
+                if (Game.goalsPlayer1 == 1) {
+                    Game.winner = Game.Winner.ONE;
                 } else {
-                    Game.winner = Game.Turn.PLAYER2;
+                    Game.winner = Game.Winner.TWO;
                 }
                 return true;
             }
         } else {
             if (timerFinished) {
                 if (Game.goalsPlayer1 > Game.goalsPlayer2) {
-                    Game.winner = Game.Turn.PLAYER1;
+                    Game.winner = Game.Winner.ONE;
                 } else if (Game.goalsPlayer1 < Game.goalsPlayer2) {
-                    Game.winner = Game.Turn.PLAYER2;
+                    Game.winner = Game.Winner.TWO;
                 } else {
-                    // DRAW
+                    Game.winner = Game.Winner.DRAW;
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    public static String getWinnerMessage() {
+        if (Game.winner.equals(Game.Winner.ONE)) {
+            return "PLAYER 1 WINS";
+        } else if (Game.winner.equals(Game.Winner.TWO)) {
+            return "PLAYER 2 WINS";
+        } else {
+            return "IT IS DRAW";
+        }
     }
 }

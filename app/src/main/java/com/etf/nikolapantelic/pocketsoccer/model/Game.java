@@ -13,11 +13,12 @@ public class Game {
     public static int goalsPlayer2;
 
     public static Turn playing, waiting; // whose turn is it?
-    public static Turn winner;
+    public static Winner winner;
 
     public static Ball football;
 
     public static OpponentType opponent;
+    public static boolean finished;
 
     public static void reset() {
 
@@ -27,6 +28,7 @@ public class Game {
         goalsPlayer2 = 0;
 
         winner = null;
+        finished = false;
 
         playing = Turn.PLAYER1;
         waiting = Turn.PLAYER2;
@@ -79,4 +81,9 @@ public class Game {
     public enum Turn {
         PLAYER1, PLAYER2
     }
+
+    public enum Winner {
+        ONE, TWO, DRAW
+    }
+
 }

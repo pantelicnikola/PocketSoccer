@@ -2,13 +2,17 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -21,6 +25,8 @@ import android.widget.TextView;
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
+import com.etf.nikolapantelic.pocketsoccer.scores.IndividualScores;
 import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 import java.util.Timer;
@@ -83,18 +89,23 @@ public class GameActivity extends FragmentActivity {
                                 if (!Game.paused) {
                                     GamePhysics.moveBalls();
                                     if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
-
                                         Game.pause();
                                         showMessage(GameLogic.getResultMessage());
-//                                        setContentView(R.layout.activity_game);
-//                                        setupBalls();
                                         restoreBallPositions();
                                         Game.resume();
                                     }
-                                    if (GameLogic.isGameOver()) {
-//                                        Game.stop();
-                                        System.out.println("GOTOVICA");
-                                    }
+                                }
+                                if (GameLogic.isGameOver()) {
+                                    Game.pause();
+//                                        Game.finished = true;
+//                                        GameLogic.stopGame();
+                                    showMessage(GameLogic.getWinnerMessage());
+                                    moveToScores();
+                                    Game.resume();
+                                    timer.cancel();
+                                    timer.purge();
+                                    // save the result
+                                    // go to scores activity
                                 }
                             }
                         });
@@ -102,48 +113,6 @@ public class GameActivity extends FragmentActivity {
                 }, 0, 20);
             }
         });
-    }
-
-    private void setGameEnd() {
-        GameLogic.setEndType(GamePreferencesHelper.getInstance(this).getEndType());
-        if (GameLogic.getEndType().equals(GamePreferencesHelper.EndType.TIME)) {
-            gameTimer = new CountDownTimer(300000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-                    String timeString = millisUntilFinished / 60000 + " : " + millisUntilFinished / 1000 % 60;
-                    textViewTimer.setText(timeString);
-                }
-
-                public void onFinish() {
-                    GameLogic.timerFinished = true;
-                }
-
-            }.start();
-        } else {
-            textViewTimer.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void setFieldColor() {
-        switch (GamePreferencesHelper.getInstance(this).getFieldType()) {
-            case GREEN:
-                constraintLayout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
-                break;
-            case YELLOW:
-                constraintLayout.setBackground(getResources().getDrawable(R.drawable.parquet_field, null));
-                break;
-            case GREY:
-                constraintLayout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
-                break;
-        }
-    }
-
-    private void restoreBallPositions() {
-        constraintSet.applyTo(constraintLayout);
-    }
-
-    private void saveBallParams() {
-        constraintSet.clone(constraintLayout);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -198,21 +167,87 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void showMessage(String message) {
+        messageFragment = new MessageFragment();
         messageFragment.setMessage(message);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, messageFragment)
-                .commit();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        while (!fragmentManager.getFragments().isEmpty()) {
+            int i = 0;
+        }
+
+        fragmentManager
+            .beginTransaction()
+            .add(R.id.fragment_container, messageFragment)
+            .commit();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getSupportFragmentManager()
+                fragmentManager
                         .beginTransaction()
                         .remove(messageFragment).commit();
+                finish();
             }
         }, 3000);
+
+//        new LongOperation().execute(message);
+
+    }
+
+    private void setGameEnd() {
+        GameLogic.setEndType(GamePreferencesHelper.getInstance(this).getEndType());
+        if (GameLogic.getEndType().equals(GamePreferencesHelper.EndType.TIME)) {
+            gameTimer = new CountDownTimer(300000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    String timeString = millisUntilFinished / 60000 + " : " + millisUntilFinished / 1000 % 60;
+                    textViewTimer.setText(timeString);
+                }
+
+                public void onFinish() {
+                    GameLogic.timerFinished = true;
+                }
+
+            }.start();
+        } else {
+            textViewTimer.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setFieldColor() {
+        switch (GamePreferencesHelper.getInstance(this).getFieldType()) {
+            case GREEN:
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.grass_field, null));
+                break;
+            case YELLOW:
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.parquet_field, null));
+                break;
+            case GREY:
+                constraintLayout.setBackground(getResources().getDrawable(R.drawable.concrete_field, null));
+                break;
+        }
+    }
+
+    private void restoreBallPositions() {
+        constraintSet.applyTo(constraintLayout);
+    }
+
+    private void saveBallParams() {
+        constraintSet.clone(constraintLayout);
+    }
+
+    private void moveToScores() {
+//        Intent intent = new Intent(this, IndividualScores.class);
+//        startActivity(intent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent start = new Intent(GameActivity.this, IndividualScores.class);
+                startActivity(start);
+                finish();
+            }
+        }, 7000);
     }
 
     public static int getWindowHeight() {
@@ -222,4 +257,43 @@ public class GameActivity extends FragmentActivity {
     public static int getWindowWidth() {
         return WINDOW_WIDTH;
     }
+
+
+    private class LongOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                messageFragment.setMessage(strings[0]);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, messageFragment)
+                        .commit();
+
+                Thread.sleep(3000);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(messageFragment).commit();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+//    private class LongOperation2 extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            moveToScores();
+//            return null;
+//        }
+//
+//    }
+
+//    private void asd() {
+//        new LongOperation2().execute();
+//    }
 }
