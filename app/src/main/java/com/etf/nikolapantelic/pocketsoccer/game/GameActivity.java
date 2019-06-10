@@ -45,12 +45,15 @@ public class GameActivity extends FragmentActivity {
 
     private ConstraintSet constraintSet;
     private ConstraintLayout constraintLayout;
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        context = this;
 
         textViewTimer = findViewById(R.id.textViewTimer);
         constraintLayout = findViewById(R.id.root);
@@ -100,7 +103,8 @@ public class GameActivity extends FragmentActivity {
 //                                        Game.pause();
 //                                        Game.finished = true;
                                         GameLogic.stopGame();
-                                        showMessage(GameLogic.getWinnerMessage());
+//                                        showMessage(GameLogic.getWinnerMessage());
+                                        GameLogic.persistGame(getContext());
                                         moveToScores();
 //                                        Game.resume();
                                         // save the result
@@ -113,6 +117,31 @@ public class GameActivity extends FragmentActivity {
                 }, 0, 20);
             }
         });
+    }
+
+    private void showMessage(String message) {
+//        messageFragment = new MessageFragment();
+//        messageFragment.setMessage(message);
+//
+//        final FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//        fragmentManager
+//            .beginTransaction()
+//            .add(R.id.fragment_container, messageFragment)
+//            .commit();
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                fragmentManager
+//                        .beginTransaction()
+//                        .remove(messageFragment).commit();
+//                finish();
+//            }
+//        }, 3000);
+
+        new LongOperation().execute(message);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -166,31 +195,6 @@ public class GameActivity extends FragmentActivity {
         }
     }
 
-    private void showMessage(String message) {
-//        messageFragment = new MessageFragment();
-//        messageFragment.setMessage(message);
-//
-//        final FragmentManager fragmentManager = getSupportFragmentManager();
-//
-//        fragmentManager
-//            .beginTransaction()
-//            .add(R.id.fragment_container, messageFragment)
-//            .commit();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                fragmentManager
-//                        .beginTransaction()
-//                        .remove(messageFragment).commit();
-//                finish();
-//            }
-//        }, 3000);
-
-        new LongOperation().execute(message);
-
-    }
-
     private void setGameEnd() {
         GameLogic.setEndType(GamePreferencesHelper.getInstance(this).getEndType());
         if (GameLogic.getEndType().equals(GamePreferencesHelper.EndType.TIME)) {
@@ -225,14 +229,6 @@ public class GameActivity extends FragmentActivity {
         }
     }
 
-    private void restoreBallPositions() {
-        constraintSet.applyTo(constraintLayout);
-    }
-
-    private void saveBallParams() {
-        constraintSet.clone(constraintLayout);
-    }
-
     private void moveToScores() {
 //        Intent intent = new Intent(this, IndividualScores.class);
 //        startActivity(intent);
@@ -243,15 +239,7 @@ public class GameActivity extends FragmentActivity {
                 startActivity(start);
                 finish();
             }
-        }, 8000);
-    }
-
-    public static int getWindowHeight() {
-        return WINDOW_HEIGHT;
-    }
-
-    public static int getWindowWidth() {
-        return WINDOW_WIDTH;
+        }, 4000);
     }
 
 
@@ -277,9 +265,30 @@ public class GameActivity extends FragmentActivity {
             }
             return null;
         }
+
     }
 
-//    private class LongOperation2 extends AsyncTask<String, Void, String> {
+    public static int getWindowHeight() {
+        return WINDOW_HEIGHT;
+    }
+
+    public static int getWindowWidth() {
+        return WINDOW_WIDTH;
+    }
+
+    private void restoreBallPositions() {
+        constraintSet.applyTo(constraintLayout);
+    }
+
+    private void saveBallParams() {
+        constraintSet.clone(constraintLayout);
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    //    private class LongOperation2 extends AsyncTask<String, Void, String> {
 //
 //        @Override
 //        protected String doInBackground(String... strings) {
@@ -287,8 +296,8 @@ public class GameActivity extends FragmentActivity {
 //            return null;
 //        }
 //
-//    }
 
+//    }
 //    private void asd() {
 //        new LongOperation2().execute();
 //    }

@@ -1,12 +1,21 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
-import android.os.CountDownTimer;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
-import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.scores.GamesDbHelper;
+import com.etf.nikolapantelic.pocketsoccer.scores.ResultsDbHelper;
 import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
+import static com.etf.nikolapantelic.pocketsoccer.scores.GamesContract.GamesEntry;
+import static com.etf.nikolapantelic.pocketsoccer.scores.ResultsContract.ResultsEntry;
+
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -123,5 +132,87 @@ public class GameLogic {
         } else {
             return "IT IS DRAW";
         }
+    }
+
+    public static void persistGame(Context context) {
+
+        GamesDbHelper gamesDbHelper = new GamesDbHelper(context);
+        SQLiteDatabase gamesDb = gamesDbHelper.getWritableDatabase();
+
+        ResultsDbHelper resultsDbHelper = new ResultsDbHelper(context);
+        SQLiteDatabase resultsDb = resultsDbHelper.getWritableDatabase();
+
+// Create a new map of values, where column names are the keys
+
+        String player1Name = Game.player1.getName();
+        String player2Name = Game.player2.getName();
+        String playersId = Integer.toHexString(player1Name.hashCode() ^ player2Name.hashCode());
+        Integer player1Wins = 0;
+        Integer player2Wins = 0;
+//        String result = Game.goalsPlayer1 + " - " + Game.goalsPlayer2;
+
+        ContentValues values = new ContentValues();
+        values.put(GamesEntry.COLUMN_PLAYER1, player1Name);
+        values.put(GamesEntry.COLUMN_PLAYER2, player2Name);
+        values.put(GamesEntry.COLUMN_TIME, Calendar.getInstance().getTime().toString());
+        values.put(GamesEntry.COLUMN_PLAYERS_ID, playersId);
+        values.put(GamesEntry.COLUMN_RESULT, GameLogic.getResultMessage());
+
+        // Insert the new row, returning the primary key value of the new row
+        gamesDb.insert(GamesEntry.TABLE_NAME, null, values);
+
+
+        ///////////////////////////////////////////////////////////////////
+
+        String[] projection = {
+                BaseColumns._ID,
+                ResultsEntry.COLUMN_PLAYER1_WINS,
+                ResultsEntry.COLUMN_PLAYER2_WINS
+        };
+
+// Filter results WHERE "title" = 'My Title'
+        String selection = ResultsEntry.COLUMN_PLAYERS_ID + " = ?";
+        String[] selectionArgs = { playersId };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder = BaseColumns._ID + " DESC";
+
+        Cursor cursor = resultsDb.query(
+                ResultsEntry.TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            player1Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER1_WINS));
+            player2Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER2_WINS));
+        }
+
+        switch (Game.winner) {
+            case DRAW:
+                player2Wins++;
+                player1Wins++;
+                break;
+            case TWO:
+                player2Wins++;
+                break;
+            case ONE:
+                player1Wins++;
+                break;
+        }
+
+        values = new ContentValues();
+        values.put(ResultsEntry.COLUMN_PLAYER1, player1Name);
+        values.put(ResultsEntry.COLUMN_PLAYER2, player2Name);
+        values.put(ResultsEntry.COLUMN_PLAYERS_ID, playersId);
+        values.put(ResultsEntry.COLUMN_PLAYER1_WINS, player1Wins);
+        values.put(ResultsEntry.COLUMN_PLAYER1_WINS, player2Wins);
+
+        resultsDb.replace(ResultsEntry.TABLE_NAME, null, values);
     }
 }
