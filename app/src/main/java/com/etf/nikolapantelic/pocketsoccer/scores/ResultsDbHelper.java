@@ -4,12 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.etf.nikolapantelic.pocketsoccer.R;
+
 import static com.etf.nikolapantelic.pocketsoccer.scores.ResultsContract.ResultsEntry;
 
 public class ResultsDbHelper extends SQLiteOpenHelper {
-
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "PocketSoccer.db";
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ResultsEntry.TABLE_NAME + " (" +
@@ -17,11 +16,16 @@ public class ResultsDbHelper extends SQLiteOpenHelper {
                     ResultsEntry.COLUMN_PLAYER1 + " TEXT," +
                     ResultsEntry.COLUMN_PLAYER2 + " TEXT," +
                     ResultsEntry.COLUMN_PLAYER1_WINS + " INT," +
-                    ResultsEntry.COLUMN_PLAYER1_WINS + " INT," +
+                    ResultsEntry.COLUMN_PLAYER2_WINS + " INT," +
                     ResultsEntry.COLUMN_PLAYERS_ID + " TEXT)" ;
 
     public ResultsDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(
+                context,
+                context.getResources().getString(R.string.database_name),
+                null,
+                context.getResources().getInteger(R.integer.database_version)
+        );
     }
 
     private static final String SQL_DELETE_ENTRIES =
@@ -34,6 +38,7 @@ public class ResultsDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }

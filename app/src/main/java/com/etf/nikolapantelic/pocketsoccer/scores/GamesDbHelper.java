@@ -4,15 +4,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.etf.nikolapantelic.pocketsoccer.R;
+
 import static com.etf.nikolapantelic.pocketsoccer.scores.GamesContract.GamesEntry;
 
 public class GamesDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
-
-    public static final String DATABASE_NAME = "PocketSoccer.db";
 
     public GamesDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(
+                context,
+                context.getResources().getString(R.string.database_name),
+                null,
+                context.getResources().getInteger(R.integer.database_version)
+        );
     }
 
     private static final String SQL_CREATE_ENTRIES =

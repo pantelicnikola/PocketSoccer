@@ -10,17 +10,12 @@ import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.SettingsActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
-import static com.etf.nikolapantelic.pocketsoccer.scores.ResultsDbHelper.DATABASE_NAME;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        this.deleteDatabase(DATABASE_NAME);
-
 
         Button continueButton = findViewById(R.id.button_continue);
         Button newGameButton = findViewById(R.id.button_new_game);
