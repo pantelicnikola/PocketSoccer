@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
+import com.etf.nikolapantelic.pocketsoccer.scores.AllScoresActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.SettingsActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
@@ -49,8 +50,19 @@ public class MainActivity extends AppCompatActivity {
                 onClickNewGame(v);
             }
         });
+
+        scoresButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickScores(v);
+            }
+        });
     }
 
+    private void onClickScores(View v) {
+        Intent intent = new Intent(this, AllScoresActivity.class);
+        startActivity(intent);
+    }
 
 
     public void onClickContinue(View view) {

@@ -9,7 +9,7 @@ import static com.etf.nikolapantelic.pocketsoccer.scores.GamesContract.GamesEntr
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 
-public class IndividualScores extends AppCompatActivity {
+public class MutualScoresActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

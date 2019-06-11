@@ -12,21 +12,18 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
-import com.etf.nikolapantelic.pocketsoccer.scores.IndividualScores;
+import com.etf.nikolapantelic.pocketsoccer.scores.MutualScoresActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 import java.util.Timer;
@@ -230,12 +227,12 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void moveToScores() {
-//        Intent intent = new Intent(this, IndividualScores.class);
+//        Intent intent = new Intent(this, MutualScoresActivity.class);
 //        startActivity(intent);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent start = new Intent(GameActivity.this, IndividualScores.class);
+                Intent start = new Intent(GameActivity.this, MutualScoresActivity.class);
                 startActivity(start);
                 finish();
             }

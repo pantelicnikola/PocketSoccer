@@ -1,24 +1,21 @@
-package com.etf.nikolapantelic.pocketsoccer.newgame;
+package com.etf.nikolapantelic.pocketsoccer.scores;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
+import com.etf.nikolapantelic.pocketsoccer.newgame.CountryClickListener;
 
-public class CountriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-    public TextView textView;
-    public ImageView imageView;
+public class AllScoresViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     CountryClickListener countryClickListener;
+    TextView textViewScore;
 
-    public CountriesViewHolder(@NonNull final View itemView) {
+    public AllScoresViewHolder(@NonNull View itemView) {
         super(itemView);
-        textView = itemView.findViewById(R.id.textViewScore);
-        imageView = itemView.findViewById(R.id.image_view_country_flag);
+        textViewScore = itemView.findViewById(R.id.textViewScore);
         itemView.setOnClickListener(this);
     }
 

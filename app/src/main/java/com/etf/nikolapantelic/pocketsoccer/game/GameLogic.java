@@ -146,10 +146,10 @@ public class GameLogic {
 
         String player1Name = Game.player1.getName();
         String player2Name = Game.player2.getName();
+        String resultId = null;
         String playersId = Integer.toHexString(player1Name.hashCode() ^ player2Name.hashCode());
         Integer player1Wins = 0;
         Integer player2Wins = 0;
-//        String result = Game.goalsPlayer1 + " - " + Game.goalsPlayer2;
 
         ContentValues values = new ContentValues();
         values.put(GamesEntry.COLUMN_PLAYER1, player1Name);
@@ -157,6 +157,10 @@ public class GameLogic {
         values.put(GamesEntry.COLUMN_TIME, Calendar.getInstance().getTime().toString());
         values.put(GamesEntry.COLUMN_PLAYERS_ID, playersId);
         values.put(GamesEntry.COLUMN_RESULT, GameLogic.getResultMessage());
+
+//        RESTART TABLES
+//        gamesDb.execSQL("delete from " + GamesEntry.TABLE_NAME);
+//        resultsDb.execSQL("delete from " + ResultsEntry.TABLE_NAME);
 
         // Insert the new row, returning the primary key value of the new row
         gamesDb.insert(GamesEntry.TABLE_NAME, null, values);
@@ -187,10 +191,13 @@ public class GameLogic {
                 sortOrder               // The sort order
         );
 
+        ContentValues values2 = new ContentValues();
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             player1Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER1_WINS));
             player2Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER2_WINS));
+            resultId = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
+            values2.put(BaseColumns._ID, resultId);
         }
 
         switch (Game.winner) {
@@ -206,13 +213,12 @@ public class GameLogic {
                 break;
         }
 
-        values = new ContentValues();
-        values.put(ResultsEntry.COLUMN_PLAYER1, player1Name);
-        values.put(ResultsEntry.COLUMN_PLAYER2, player2Name);
-        values.put(ResultsEntry.COLUMN_PLAYERS_ID, playersId);
-        values.put(ResultsEntry.COLUMN_PLAYER1_WINS, player1Wins);
-        values.put(ResultsEntry.COLUMN_PLAYER1_WINS, player2Wins);
+        values2.put(ResultsEntry.COLUMN_PLAYER1, player1Name);
+        values2.put(ResultsEntry.COLUMN_PLAYER2, player2Name);
+        values2.put(ResultsEntry.COLUMN_PLAYERS_ID, playersId);
+        values2.put(ResultsEntry.COLUMN_PLAYER1_WINS, player1Wins);
+        values2.put(ResultsEntry.COLUMN_PLAYER2_WINS, player2Wins);
 
-        resultsDb.replace(ResultsEntry.TABLE_NAME, null, values);
+        resultsDb.replace(ResultsEntry.TABLE_NAME, null, values2);
     }
 }
