@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.scores;
+package com.etf.nikolapantelic.pocketsoccer.common.db;
 
 import android.provider.BaseColumns;
 

@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.settings;
+package com.etf.nikolapantelic.pocketsoccer.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,12 +31,10 @@ public class GamePreferencesHelper {
     }
 
     public static GamePreferencesHelper getInstance(Context context) {
-        instance = null;
         if (instance == null) {
-            return instance = new GamePreferencesHelper(context);
-        } else {
-            return instance;
+            instance = new GamePreferencesHelper(context);
         }
+        return instance;
     }
 
     private void initialize() {

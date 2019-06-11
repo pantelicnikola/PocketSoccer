@@ -1,7 +1,6 @@
 package com.etf.nikolapantelic.pocketsoccer.newgame;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +16,7 @@ import com.etf.nikolapantelic.pocketsoccer.game.GameActivity;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 import com.etf.nikolapantelic.pocketsoccer.model.Country;
 import com.etf.nikolapantelic.pocketsoccer.model.Player;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.etf.nikolapantelic.pocketsoccer.newgame.recyclerView.CountriesAdapter;
 
 public class PlayerSettupActivity extends AppCompatActivity {
 

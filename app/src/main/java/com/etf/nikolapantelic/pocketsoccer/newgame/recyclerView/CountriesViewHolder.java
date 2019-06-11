@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.newgame;
+package com.etf.nikolapantelic.pocketsoccer.newgame.recyclerView;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,13 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
+import com.etf.nikolapantelic.pocketsoccer.common.RecyclerViewClickListener;
 
 public class CountriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView textView;
     public ImageView imageView;
 
-    CountryClickListener countryClickListener;
+    RecyclerViewClickListener recyclerViewClickListener;
 
     public CountriesViewHolder(@NonNull final View itemView) {
         super(itemView);
@@ -24,10 +25,10 @@ public class CountriesViewHolder extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View v) {
-        countryClickListener.onClick(v, getAdapterPosition());
+        recyclerViewClickListener.onClick(v, getAdapterPosition());
     }
 
-    public void setCountryClickListener(CountryClickListener countryClickListener) {
-        this.countryClickListener = countryClickListener;
+    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
+        this.recyclerViewClickListener = recyclerViewClickListener;
     }
 }

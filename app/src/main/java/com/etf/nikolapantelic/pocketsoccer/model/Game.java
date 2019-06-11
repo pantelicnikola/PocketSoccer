@@ -66,6 +66,10 @@ public class Game {
         }
     }
 
+    public static String getPlayersId() {
+        return Integer.toHexString(player1.getName().hashCode() ^ player2.getName().hashCode());
+    }
+
     public static void pause() {
         paused = true;
     }

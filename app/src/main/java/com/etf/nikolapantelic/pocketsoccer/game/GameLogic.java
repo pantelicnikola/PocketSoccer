@@ -8,12 +8,12 @@ import android.provider.BaseColumns;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.scores.GamesDbHelper;
-import com.etf.nikolapantelic.pocketsoccer.scores.ResultsDbHelper;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.db.GamesDbHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDbHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
 
-import static com.etf.nikolapantelic.pocketsoccer.scores.GamesContract.GamesEntry;
-import static com.etf.nikolapantelic.pocketsoccer.scores.ResultsContract.ResultsEntry;
+import static com.etf.nikolapantelic.pocketsoccer.common.db.GamesContract.GamesEntry;
+import static com.etf.nikolapantelic.pocketsoccer.common.db.ResultsContract.ResultsEntry;
 
 import java.util.Calendar;
 import java.util.Timer;
@@ -147,7 +147,7 @@ public class GameLogic {
         String player1Name = Game.player1.getName();
         String player2Name = Game.player2.getName();
         String resultId = null;
-        String playersId = Integer.toHexString(player1Name.hashCode() ^ player2Name.hashCode());
+        String playersId = Game.getPlayersId();
         Integer player1Wins = 0;
         Integer player2Wins = 0;
 

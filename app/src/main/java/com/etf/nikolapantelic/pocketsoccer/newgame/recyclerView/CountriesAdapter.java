@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.newgame;
+package com.etf.nikolapantelic.pocketsoccer.newgame.recyclerView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
-import com.etf.nikolapantelic.pocketsoccer.model.Game;
+import com.etf.nikolapantelic.pocketsoccer.common.RecyclerViewClickListener;
 import com.etf.nikolapantelic.pocketsoccer.model.Country;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesViewHolder> 
         countriesViewHolder.textView.setText(countries.get(i).getName());
         countriesViewHolder.imageView.setImageResource(countries.get(i).getFlag());
 
-        countriesViewHolder.setCountryClickListener(new CountryClickListener() {
+        countriesViewHolder.setRecyclerViewClickListener(new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 row_index = position;

@@ -24,7 +24,7 @@ import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 import com.etf.nikolapantelic.pocketsoccer.scores.MutualScoresActivity;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -232,8 +232,9 @@ public class GameActivity extends FragmentActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent start = new Intent(GameActivity.this, MutualScoresActivity.class);
-                startActivity(start);
+                Intent intent = new Intent(GameActivity.this, MutualScoresActivity.class);
+                intent.putExtra("playersId", Game.getPlayersId());
+                startActivity(intent);
                 finish();
             }
         }, 4000);
@@ -285,17 +286,4 @@ public class GameActivity extends FragmentActivity {
         return context;
     }
 
-    //    private class LongOperation2 extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(String... strings) {
-//            moveToScores();
-//            return null;
-//        }
-//
-
-//    }
-//    private void asd() {
-//        new LongOperation2().execute();
-//    }
 }

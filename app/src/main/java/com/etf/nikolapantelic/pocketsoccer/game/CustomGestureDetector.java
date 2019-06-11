@@ -5,8 +5,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
-import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
 
 class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
 

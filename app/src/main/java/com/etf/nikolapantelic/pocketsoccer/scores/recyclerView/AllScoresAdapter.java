@@ -1,6 +1,7 @@
-package com.etf.nikolapantelic.pocketsoccer.scores;
+package com.etf.nikolapantelic.pocketsoccer.scores.recyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
@@ -11,42 +12,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
-import com.etf.nikolapantelic.pocketsoccer.newgame.CountryClickListener;
+import com.etf.nikolapantelic.pocketsoccer.common.RecyclerViewClickListener;
+import com.etf.nikolapantelic.pocketsoccer.scores.MutualScoresActivity;
+import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.etf.nikolapantelic.pocketsoccer.scores.ResultsContract.ResultsEntry;
+import static com.etf.nikolapantelic.pocketsoccer.common.db.ResultsContract.ResultsEntry;
 
 public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> {
 
-    List<String> allScoresRows;
-    List<String> allScoresIds;
+    private List<String> allScoresRows;
+    private List<String> allPlayersIds;
+    private Context context;
 
-    public AllScoresAdapter(Context context) {
+    public AllScoresAdapter(Context context, Cursor cursor) {
+
+        this.context = context;
+        // tuple?
         allScoresRows = new ArrayList<>();
-        allScoresIds = new ArrayList<>();
-        ResultsDbHelper dbHelper = new ResultsDbHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                BaseColumns._ID,
-                ResultsEntry.COLUMN_PLAYER1_WINS,
-                ResultsEntry.COLUMN_PLAYER2_WINS,
-                ResultsEntry.COLUMN_PLAYER1,
-                ResultsEntry.COLUMN_PLAYER2,
-                ResultsEntry.COLUMN_PLAYERS_ID
-        };
-
-        Cursor cursor = db.query(
-                ResultsEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        allPlayersIds = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
@@ -59,9 +45,10 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
                 String rowContent = player1 + " " + player1Wins + " - " + player2Wins + " " + player2;
                 allScoresRows.add(rowContent);
 
-                allScoresIds.add(playersId);
+                allPlayersIds.add(playersId);
             } while (cursor.moveToNext());
         }
+        cursor.close();
     }
 
     @NonNull
@@ -74,13 +61,15 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull AllScoresViewHolder allScoresViewHolder, int i) {
-        allScoresViewHolder.textViewScore.setText(allScoresRows.get(i));
-//        allScoresViewHolder.setCountryClickListener(new CountryClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                //
-//            }
-//        });
+        allScoresViewHolder.getTextViewScore().setText(allScoresRows.get(i));
+        allScoresViewHolder.setRecyclerViewClickListener(new RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(context, MutualScoresActivity.class);
+                intent.putExtra("playersId", allPlayersIds.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

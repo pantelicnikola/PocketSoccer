@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.etf.nikolapantelic.pocketsoccer.newgame.NewGameActivity;
 import com.etf.nikolapantelic.pocketsoccer.scores.AllScoresActivity;
 import com.etf.nikolapantelic.pocketsoccer.settings.SettingsActivity;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
 
 public class MainActivity extends AppCompatActivity {
 

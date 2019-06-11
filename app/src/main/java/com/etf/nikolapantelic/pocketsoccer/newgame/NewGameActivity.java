@@ -8,7 +8,6 @@ import android.widget.Button;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper;
 
 public class NewGameActivity extends AppCompatActivity {
 

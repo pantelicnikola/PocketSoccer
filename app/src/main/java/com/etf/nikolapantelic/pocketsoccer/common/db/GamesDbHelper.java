@@ -1,4 +1,4 @@
-package com.etf.nikolapantelic.pocketsoccer.scores;
+package com.etf.nikolapantelic.pocketsoccer.common.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 
-import static com.etf.nikolapantelic.pocketsoccer.scores.GamesContract.GamesEntry;
+import static com.etf.nikolapantelic.pocketsoccer.common.db.GamesContract.GamesEntry;
 
 public class GamesDbHelper extends SQLiteOpenHelper {
 

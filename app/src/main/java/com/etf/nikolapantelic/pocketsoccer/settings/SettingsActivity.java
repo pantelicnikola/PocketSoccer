@@ -4,9 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.EndType;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.FieldType;
-import com.etf.nikolapantelic.pocketsoccer.settings.GamePreferencesHelper.GameSpeed;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper.EndType;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper.FieldType;
+import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper.GameSpeed;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 
