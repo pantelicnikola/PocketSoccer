@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
-import com.etf.nikolapantelic.pocketsoccer.newgame.CountriesViewHolder;
 import com.etf.nikolapantelic.pocketsoccer.newgame.CountryClickListener;
 
 import java.util.ArrayList;
@@ -76,12 +75,12 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull AllScoresViewHolder allScoresViewHolder, int i) {
         allScoresViewHolder.textViewScore.setText(allScoresRows.get(i));
-        allScoresViewHolder.setCountryClickListener(new CountryClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                //
-            }
-        });
+//        allScoresViewHolder.setCountryClickListener(new CountryClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                //
+//            }
+//        });
     }
 
     @Override

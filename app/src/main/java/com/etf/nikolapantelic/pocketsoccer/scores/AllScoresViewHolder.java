@@ -10,21 +10,21 @@ import com.etf.nikolapantelic.pocketsoccer.newgame.CountryClickListener;
 
 public class AllScoresViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    CountryClickListener countryClickListener;
+//    CountryClickListener countryClickListener;
     TextView textViewScore;
 
     public AllScoresViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewScore = itemView.findViewById(R.id.textViewScore);
-        itemView.setOnClickListener(this);
+//        itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        countryClickListener.onClick(v, getAdapterPosition());
+//        countryClickListener.onClick(v, getAdapterPosition());
     }
 
-    public void setCountryClickListener(CountryClickListener countryClickListener) {
-        this.countryClickListener = countryClickListener;
-    }
+//    public void setCountryClickListener(CountryClickListener countryClickListener) {
+//        this.countryClickListener = countryClickListener;
+//    }
 }
