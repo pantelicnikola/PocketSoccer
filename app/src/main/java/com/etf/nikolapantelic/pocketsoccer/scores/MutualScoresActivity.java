@@ -29,8 +29,8 @@ public class MutualScoresActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String playersId = intent.getStringExtra("playersId");
 
-        List<MutualScoreModel> mutualScoreModels = getGamesByPlayersId(playersId);
-        MutualScoresAdapter adapter = new MutualScoresAdapter(mutualScoreModels);
+        List<String> mutualScores = getGamesByPlayersId(playersId);
+        MutualScoresAdapter adapter = new MutualScoresAdapter(mutualScores);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewMutualScores);
         recyclerView.setHasFixedSize(true);
@@ -39,10 +39,10 @@ public class MutualScoresActivity extends AppCompatActivity {
 
     }
 
-    private List<MutualScoreModel> getGamesByPlayersId(String playersId) {
+    private List<String> getGamesByPlayersId(String playersId) {
         GamesDbHelper dbHelper = new GamesDbHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<MutualScoreModel> models = new ArrayList<>();
+        List<String> mutualScores = new ArrayList<>();
 
         String[] projection = {
                 BaseColumns._ID,
@@ -66,17 +66,26 @@ public class MutualScoresActivity extends AppCompatActivity {
 
         if (cursor.moveToFirst()) {
             do {
-                MutualScoreModel model = new MutualScoreModel(
-                    cursor.getString(cursor.getColumnIndex(BaseColumns._ID)),
-                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER1)),
-                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER2)),
-                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_RESULT)),
-                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_TIME))
-                );
-                models.add(model);
+                StringBuilder scoreString = new StringBuilder();
+                scoreString.append(cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER1)));
+                scoreString.append(" ");
+                scoreString.append(cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER2)));
+                scoreString.append(" ");
+                scoreString.append(cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_RESULT)));
+                scoreString.append(" ");
+                scoreString.append(cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_TIME)));
+
+//                MutualScoreModel model = new MutualScoreModel(
+//                    cursor.getString(cursor.getColumnIndex(BaseColumns._ID)),
+//                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER1)),
+//                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_PLAYER2)),
+//                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_RESULT)),
+//                    cursor.getString(cursor.getColumnIndex(GamesEntry.COLUMN_TIME))
+//                );
+                mutualScores.add(scoreString.toString());
             } while (cursor.moveToNext());
         }
 
-        return models;
+        return mutualScores;
     }
 }

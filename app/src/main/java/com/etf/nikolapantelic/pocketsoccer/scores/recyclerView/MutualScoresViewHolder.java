@@ -9,33 +9,14 @@ import com.etf.nikolapantelic.pocketsoccer.R;
 
 public class MutualScoresViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView textViewPlayer1;
-    private TextView textViewPlayer2;
-    private TextView textViewResult;
-    private TextView textViewTime;
+    private TextView score;
 
     public MutualScoresViewHolder(@NonNull View itemView) {
         super(itemView);
-
-        textViewPlayer1 = itemView.findViewById(R.id.textViewPlayer1);
-        textViewPlayer2 = itemView.findViewById(R.id.textViewPlayer2);
-        textViewResult = itemView.findViewById(R.id.textViewResult);
-        textViewTime = itemView.findViewById(R.id.textViewTime);
+        score = itemView.findViewById(R.id.textViewScore);
     }
 
-    public TextView getTextViewPlayer1() {
-        return textViewPlayer1;
-    }
-
-    public TextView getTextViewPlayer2() {
-        return textViewPlayer2;
-    }
-
-    public TextView getTextViewResult() {
-        return textViewResult;
-    }
-
-    public TextView getTextViewTime() {
-        return textViewTime;
+    public TextView getScore() {
+        return score;
     }
 }

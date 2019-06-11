@@ -3,8 +3,6 @@ package com.etf.nikolapantelic.pocketsoccer.scores.recyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.common.RecyclerViewClickListener;
 import com.etf.nikolapantelic.pocketsoccer.scores.MutualScoresActivity;
-import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +52,7 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
     @Override
     public AllScoresViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.all_scores_row, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.scores_row, viewGroup, false);
         return new AllScoresViewHolder(itemView);
     }
 
