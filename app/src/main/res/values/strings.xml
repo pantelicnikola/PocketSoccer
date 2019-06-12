@@ -59,6 +59,7 @@
     <string name="settings_choose_field">Choose Field Type</string>
     <string name="settings_choose_speed">Choose Game Speed</string>
     <string name="settings_choose_end">Choose End Game</string>
+    <string name="all_scores_main_menu">Go To Main Menu</string>
 
 
 </resources>

@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 
 import static com.etf.nikolapantelic.pocketsoccer.common.db.GamesContract.GamesEntry;
 
+import com.etf.nikolapantelic.pocketsoccer.MainActivity;
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.common.db.GamesDAO;
 import com.etf.nikolapantelic.pocketsoccer.common.db.GamesDbHelper;
@@ -28,8 +31,7 @@ public class MutualScoresActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mutual_scores);
 
-        Intent intent = getIntent();
-        String playersId = intent.getStringExtra("playersId");
+        String playersId = getIntent().getStringExtra("playersId");
 
         List<GameModel> mutualScores = GamesDAO.getGamesByPlayersId(this, playersId);
         MutualScoresAdapter adapter = new MutualScoresAdapter(mutualScores);
@@ -39,5 +41,13 @@ public class MutualScoresActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        Button mainMenuButton = findViewById(R.id.buttonMainMenu);
+        mainMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
