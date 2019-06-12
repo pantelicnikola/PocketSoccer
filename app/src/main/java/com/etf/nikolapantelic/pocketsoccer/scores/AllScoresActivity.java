@@ -10,8 +10,12 @@ import android.support.v7.widget.RecyclerView;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsContract;
+import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDAO;
 import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDbHelper;
+import com.etf.nikolapantelic.pocketsoccer.common.db.model.ResultModel;
 import com.etf.nikolapantelic.pocketsoccer.scores.recyclerView.AllScoresAdapter;
+
+import java.util.List;
 
 public class AllScoresActivity extends AppCompatActivity {
 
@@ -20,37 +24,12 @@ public class AllScoresActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_scores);
 
-        Cursor cursor = getAllResults();
-        AllScoresAdapter adapter = new AllScoresAdapter(this, cursor);
+        List<ResultModel> allScores = ResultsDAO.getAll(this);
+        AllScoresAdapter adapter = new AllScoresAdapter(this, allScores);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewAllScores);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private Cursor getAllResults() {
-
-        ResultsDbHelper dbHelper = new ResultsDbHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                BaseColumns._ID,
-                ResultsContract.ResultsEntry.COLUMN_PLAYER1_WINS,
-                ResultsContract.ResultsEntry.COLUMN_PLAYER2_WINS,
-                ResultsContract.ResultsEntry.COLUMN_PLAYER1,
-                ResultsContract.ResultsEntry.COLUMN_PLAYER2,
-                ResultsContract.ResultsEntry.COLUMN_PLAYERS_ID
-        };
-
-        return db.query(
-                ResultsContract.ResultsEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
     }
 }

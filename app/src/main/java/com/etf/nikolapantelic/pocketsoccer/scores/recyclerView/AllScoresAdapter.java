@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.common.RecyclerViewClickListener;
+import com.etf.nikolapantelic.pocketsoccer.common.db.model.ResultModel;
 import com.etf.nikolapantelic.pocketsoccer.scores.MutualScoresActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,32 +23,12 @@ import static com.etf.nikolapantelic.pocketsoccer.common.db.ResultsContract.Resu
 
 public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> {
 
-    private List<String> allScoresRows;
-    private List<String> allPlayersIds;
+    private List<ResultModel> allScores;
     private Context context;
 
-    public AllScoresAdapter(Context context, Cursor cursor) {
-
+    public AllScoresAdapter(Context context, @NotNull List<ResultModel> allScores) {
+        this.allScores = allScores;
         this.context = context;
-        // tuple?
-        allScoresRows = new ArrayList<>();
-        allPlayersIds = new ArrayList<>();
-
-        if (cursor.moveToFirst()) {
-            do {
-                String player1 = cursor.getString(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER1));
-                String player2 = cursor.getString(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER2));
-                Integer player1Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER1_WINS));
-                Integer player2Wins = cursor.getInt(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYER2_WINS));
-                String playersId = cursor.getString(cursor.getColumnIndex(ResultsEntry.COLUMN_PLAYERS_ID));
-
-                String rowContent = player1 + " " + player1Wins + " - " + player2Wins + " " + player2;
-                allScoresRows.add(rowContent);
-
-                allPlayersIds.add(playersId);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
     }
 
     @NonNull
@@ -58,12 +41,12 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull AllScoresViewHolder allScoresViewHolder, int i) {
-        allScoresViewHolder.getTextViewScore().setText(allScoresRows.get(i));
+        allScoresViewHolder.getTextViewScore().setText(allScores.get(i).toString());
         allScoresViewHolder.setRecyclerViewClickListener(new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(context, MutualScoresActivity.class);
-                intent.putExtra("playersId", allPlayersIds.get(position));
+                intent.putExtra("playersId", allScores.get(position).getPlayersId());
                 context.startActivity(intent);
             }
         });
@@ -71,6 +54,6 @@ public class AllScoresAdapter extends RecyclerView.Adapter<AllScoresViewHolder> 
 
     @Override
     public int getItemCount() {
-        return allScoresRows.size();
+        return allScores.size();
     }
 }

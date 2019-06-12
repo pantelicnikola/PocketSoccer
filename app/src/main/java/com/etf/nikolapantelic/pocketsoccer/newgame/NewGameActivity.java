@@ -32,8 +32,8 @@ public class NewGameActivity extends AppCompatActivity {
             }
         });
 
-        //new Game
-//        Game.gamePreferencesHelper = GamePreferencesHelper.getInstance(this);
+        //new GameModel
+//        GameModel.gamePreferencesHelper = GamePreferencesHelper.getInstance(this);
     }
 
     public void onClickVsComputer(View view) {

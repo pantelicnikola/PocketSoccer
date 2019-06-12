@@ -15,11 +15,11 @@
     <string name="main_scores">Scores</string>
     <string name="main_settings">Settings</string>
 
-    <!--New Game-->
+    <!--New GameModel-->
     <string name="new_game_pve">vs Computer</string>
     <string name="new_game_pvp">vs Player</string>
 
-    <!--New Game Settings-->
+    <!--New GameModel Settings-->
     <string name="new_game_settings_add_player">Add Player</string>
     <string name="new_game_settings_player_name_hint">Player Name</string>
     <string name="new_game_settings_next">Next</string>

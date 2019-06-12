@@ -42,15 +42,12 @@ public class GameActivity extends FragmentActivity {
 
     private ConstraintSet constraintSet;
     private ConstraintLayout constraintLayout;
-    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        context = this;
 
         textViewTimer = findViewById(R.id.textViewTimer);
         constraintLayout = findViewById(R.id.root);
@@ -97,13 +94,13 @@ public class GameActivity extends FragmentActivity {
                                     if (GameLogic.isGameOver()) {
                                         timer.cancel();
                                         timer.purge();
-//                                        Game.pause();
-//                                        Game.finished = true;
+//                                        GameModel.pause();
+//                                        GameModel.finished = true;
                                         GameLogic.stopGame();
 //                                        showMessage(GameLogic.getWinnerMessage());
-                                        GameLogic.persistGame(getContext());
+                                        GameLogic.persistGame(getApplicationContext());
                                         moveToScores();
-//                                        Game.resume();
+//                                        GameModel.resume();
                                         // save the result
                                         // go to scores activity
                                     }
@@ -281,9 +278,4 @@ public class GameActivity extends FragmentActivity {
     private void saveBallParams() {
         constraintSet.clone(constraintLayout);
     }
-
-    public static Context getContext() {
-        return context;
-    }
-
 }

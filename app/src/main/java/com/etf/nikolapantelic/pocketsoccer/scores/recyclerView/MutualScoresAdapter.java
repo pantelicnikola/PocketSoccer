@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.R;
+import com.etf.nikolapantelic.pocketsoccer.common.db.model.GameModel;
 
 import java.util.List;
 
 public class MutualScoresAdapter extends RecyclerView.Adapter<MutualScoresViewHolder> {
 
-    List<String> mutualScores;
+    List<GameModel> mutualScores;
 
-    public MutualScoresAdapter(List<String> mutualScores) {
+    public MutualScoresAdapter(List<GameModel> mutualScores) {
         this.mutualScores = mutualScores;
     }
 
@@ -29,7 +30,7 @@ public class MutualScoresAdapter extends RecyclerView.Adapter<MutualScoresViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MutualScoresViewHolder mutualScoresViewHolder, int i) {
-        mutualScoresViewHolder.getScore().setText(mutualScores.get(i));
+        mutualScoresViewHolder.getScore().setText(mutualScores.get(i).toString());
     }
 
     @Override
