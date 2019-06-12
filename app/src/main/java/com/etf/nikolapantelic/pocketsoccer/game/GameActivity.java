@@ -43,6 +43,18 @@ public class GameActivity extends FragmentActivity {
     private ConstraintSet constraintSet;
     private ConstraintLayout constraintLayout;
 
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -86,10 +98,10 @@ public class GameActivity extends FragmentActivity {
                                 if (!Game.paused) {
                                     GamePhysics.moveBalls();
                                     if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
-                                        Game.pause();
+                                        GameLogic.pause();
                                         showMessage(GameLogic.getResultMessage());
                                         restoreBallPositions();
-                                        Game.resume();
+                                        GameLogic.resume();
                                     }
                                     if (GameLogic.isGameOver()) {
                                         timer.cancel();
@@ -133,9 +145,7 @@ public class GameActivity extends FragmentActivity {
 //                finish();
 //            }
 //        }, 3000);
-
         new LongOperation().execute(message);
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -224,8 +234,6 @@ public class GameActivity extends FragmentActivity {
     }
 
     private void moveToScores() {
-//        Intent intent = new Intent(this, MutualScoresActivity.class);
-//        startActivity(intent);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -237,9 +245,7 @@ public class GameActivity extends FragmentActivity {
         }, 4000);
     }
 
-
     private class LongOperation extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... strings) {
             try {
@@ -260,7 +266,6 @@ public class GameActivity extends FragmentActivity {
             }
             return null;
         }
-
     }
 
     public static int getWindowHeight() {

@@ -1,23 +1,16 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 import com.etf.nikolapantelic.pocketsoccer.common.db.GamesDAO;
 import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDAO;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
-import com.etf.nikolapantelic.pocketsoccer.common.db.GamesDbHelper;
-import com.etf.nikolapantelic.pocketsoccer.common.db.ResultsDbHelper;
 import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
+import com.etf.nikolapantelic.pocketsoccer.model.Player;
 
-import static com.etf.nikolapantelic.pocketsoccer.common.db.GamesContract.GamesEntry;
-import static com.etf.nikolapantelic.pocketsoccer.common.db.ResultsContract.ResultsEntry;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,9 +18,9 @@ public class GameLogic {
 
     private static Timer turnTimer = new Timer();
     private static GamePreferencesHelper.EndType endType;
-    public static boolean timerFinished = false;
+    static boolean timerFinished = false;
 
-    public static void changeTurn() {
+    static void changeTurn() {
         setTurn(Game.waiting);
         turnTimer.cancel();
         turnTimer = new Timer();
@@ -40,18 +33,18 @@ public class GameLogic {
     }
 
     private static void activatePlayer(Game.Turn turn) {
-        for (Ball ball : Game.getPlayerByTurn(turn).getBalls()) {
+        for (Ball ball : getPlayerByTurn(turn).getBalls()) {
             ball.enable();
         }
     }
 
     private static void deactivatePlayer(Game.Turn turn) {
-        for (Ball ball : Game.getPlayerByTurn(turn).getBalls()) {
+        for (Ball ball : getPlayerByTurn(turn).getBalls()) {
             ball.disable();
         }
     }
 
-    public static void stopGame() {
+    static void stopGame() {
         turnTimer.cancel();
         for (Ball b : Game.getAllBalls()) {
             GamePhysics.forceStop(b);
@@ -60,7 +53,7 @@ public class GameLogic {
         deactivatePlayer(Game.Turn.PLAYER2);
     }
 
-    public static boolean goalOccurred(float leftPostX, float rightPostX) {
+    static boolean goalOccurred(float leftPostX, float rightPostX) {
         Ball football = Game.football;
         float footballX = football.calculateCenterX();
 //        float leftPostX1 =  GameActivity.getContext().getResources().getFraction(R.fraction.left_post_fraction, GameActivity.getWindowWidth(), 1);
@@ -82,16 +75,22 @@ public class GameLogic {
         return false;
     }
 
-    public static void setEndType(GamePreferencesHelper.EndType endType) {
+    static void setEndType(GamePreferencesHelper.EndType endType) {
         GameLogic.endType = endType;
     }
 
-    public static GamePreferencesHelper.EndType getEndType() {
+    static GamePreferencesHelper.EndType getEndType() {
         return endType;
     }
 
-    public static void setTurn(Game.Turn player) {
-        Game.setTurn(player);
+    static void setTurn(@NotNull Game.Turn player) {
+        if (player.equals(Game.Turn.PLAYER1)) {
+            Game.playing = Game.Turn.PLAYER1;
+            Game.waiting = Game.Turn.PLAYER2;
+        } else {
+            Game.playing = Game.Turn.PLAYER2;
+            Game.waiting = Game.Turn.PLAYER1;
+        }
         deactivatePlayer(Game.waiting);
         activatePlayer(Game.playing);
     }
@@ -100,8 +99,7 @@ public class GameLogic {
         return Game.goalsPlayer1 + " - " + Game.goalsPlayer2;
     }
 
-    public static boolean isGameOver() {
-
+    static boolean isGameOver() {
         if (endType.equals(GamePreferencesHelper.EndType.GOALS)) {
             if (Game.goalsPlayer1 == 1 || Game.goalsPlayer2 == 1) {
                 if (Game.goalsPlayer1 == 1) {
@@ -136,8 +134,24 @@ public class GameLogic {
         }
     }
 
-    public static void persistGame(Context context) {
+    static void persistGame(Context context) {
         GamesDAO.insertCurrentGame(context);
         ResultsDAO.replace(context);
+    }
+
+    static void pause() {
+        Game.paused = true;
+    }
+
+    static void resume() {
+        Game.paused = false;
+    }
+
+    private static Player getPlayerByTurn(Game.Turn turn) {
+        if (turn.equals(Game.Turn.PLAYER1)) {
+            return Game.player1;
+        } else {
+            return Game.player2;
+        }
     }
 }

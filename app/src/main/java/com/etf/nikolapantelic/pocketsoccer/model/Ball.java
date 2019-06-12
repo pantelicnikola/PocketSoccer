@@ -18,12 +18,12 @@ public class Ball {
 
     public void enable() {
         imageView.setEnabled(true);
-        imageView.setAlpha(255);
+        imageView.setAlpha(1f);
     }
 
     public void disable() {
         imageView.setEnabled(false);
-        imageView.setAlpha(127);
+        imageView.setAlpha(0.5f);
     }
 
     public float calculateCenterX() {

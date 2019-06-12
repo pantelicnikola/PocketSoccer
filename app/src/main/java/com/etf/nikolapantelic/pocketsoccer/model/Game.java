@@ -1,7 +1,5 @@
 package com.etf.nikolapantelic.pocketsoccer.model;
 
-import android.support.annotation.NonNull;
-
 public class Game {
 
     public static boolean paused;
@@ -12,70 +10,40 @@ public class Game {
     public static int goalsPlayer1;
     public static int goalsPlayer2;
 
-    public static Turn playing, waiting; // whose turn is it?
+    public static Turn playing, waiting;
     public static Winner winner;
 
     public static Ball football;
 
     public static OpponentType opponent;
-    public static boolean finished;
 
     public static void reset() {
-
         paused = false;
 
         goalsPlayer1 = 0;
         goalsPlayer2 = 0;
 
         winner = null;
-        finished = false;
 
         playing = Turn.PLAYER1;
         waiting = Turn.PLAYER2;
         opponent = null;
-
     }
 
     public static Ball[] getAllBalls() {
-        Ball[] balls = new Ball[7];
-        balls[0] = football;
-        balls[1] = player1.getBall(0);
-        balls[2] = player1.getBall(1);
-        balls[3] = player1.getBall(2);
-        balls[4] = player2.getBall(0);
-        balls[5] = player2.getBall(1);
-        balls[6] = player2.getBall(2);
-        return balls;
-    }
-
-    public static void setTurn(Turn turn) {
-        if (turn.equals(Turn.PLAYER1)) {
-            playing = Turn.PLAYER1;
-            waiting = Turn.PLAYER2;
-        } else {
-            playing = Turn.PLAYER2;
-            waiting = Turn.PLAYER1;
-        }
-    }
-
-    public static Player getPlayerByTurn(@NonNull Turn turn) {
-        if (turn.equals(Turn.PLAYER1)) {
-            return player1;
-        } else {
-            return player2;
-        }
+        return new Ball[] {
+            football,
+            player1.getBall(0),
+            player1.getBall(1),
+            player1.getBall(2),
+            player2.getBall(0),
+            player2.getBall(1),
+            player2.getBall(2)
+        };
     }
 
     public static String getPlayersId() {
         return Integer.toHexString(player1.getName().hashCode() ^ player2.getName().hashCode());
-    }
-
-    public static void pause() {
-        paused = true;
-    }
-
-    public static void resume() {
-        paused = false;
     }
 
     public enum OpponentType {
@@ -89,5 +57,4 @@ public class Game {
     public enum Winner {
         ONE, TWO, DRAW
     }
-
 }
