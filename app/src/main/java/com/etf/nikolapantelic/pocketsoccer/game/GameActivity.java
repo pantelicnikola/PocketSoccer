@@ -2,14 +2,16 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -28,7 +30,12 @@ import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
+//import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.StampedLock;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class GameActivity extends FragmentActivity {
 
     private static int WINDOW_HEIGHT;
@@ -43,7 +50,9 @@ public class GameActivity extends FragmentActivity {
     private ConstraintSet constraintSet;
     private ConstraintLayout constraintLayout;
 
+    private Handler msgHandler;
 
+    private final Lock lock = new ReentrantLock();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -60,6 +69,8 @@ public class GameActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        msgHandler = new Handler();
 
         textViewTimer = findViewById(R.id.textViewTimer);
         constraintLayout = findViewById(R.id.root);
@@ -99,22 +110,22 @@ public class GameActivity extends FragmentActivity {
                                     GamePhysics.moveBalls();
                                     if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
                                         GameLogic.pause();
-                                        showMessage(GameLogic.getResultMessage());
+//
+                                        showMessage2(GameLogic.getResultMessage());
+
                                         restoreBallPositions();
                                         GameLogic.resume();
                                     }
                                     if (GameLogic.isGameOver()) {
+                                        GameLogic.pause();
+//
+////                                        GameModel.finished = true;
                                         timer.cancel();
                                         timer.purge();
-//                                        GameModel.pause();
-//                                        GameModel.finished = true;
                                         GameLogic.stopGame();
-//                                        showMessage(GameLogic.getWinnerMessage());
-                                        GameLogic.persistGame(getApplicationContext());
                                         moveToScores();
-//                                        GameModel.resume();
-                                        // save the result
-                                        // go to scores activity
+                                        GameLogic.persistGame(getApplicationContext());
+////                                        GameLogic.resume();
                                     }
                                 }
                             }
@@ -125,27 +136,117 @@ public class GameActivity extends FragmentActivity {
         });
     }
 
-    private void showMessage(String message) {
-//        messageFragment = new MessageFragment();
-//        messageFragment.setMessage(message);
-//
-//        final FragmentManager fragmentManager = getSupportFragmentManager();
-//
-//        fragmentManager
-//            .beginTransaction()
-//            .add(R.id.fragment_container, messageFragment)
-//            .commit();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                fragmentManager
-//                        .beginTransaction()
-//                        .remove(messageFragment).commit();
-//                finish();
-//            }
-//        }, 3000);
+    private void showMessage(final String message) {
         new LongOperation().execute(message);
+    }
+
+    public void showMessage1(final String message) {
+        final MessageFragment msgFragment = new MessageFragment();
+        msgFragment.setMessage(message);
+        Runnable runnableShow = new Runnable() {
+            @Override
+            public void run() {
+                lock.lock();
+                System.out.println("locked");
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, msgFragment)
+                        .commit();
+            }
+        };
+
+        Runnable runnableHide = new Runnable() {
+            @Override
+            public void run() {
+                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                }
+                lock.unlock();
+                System.out.println("unlocked");
+
+            }
+        };
+        msgHandler.post(runnableShow);
+        msgHandler.postDelayed(runnableHide, 3000);
+    }
+
+    public void showMessage2(String message) {
+        new ShowMsg(message).start();
+    }
+
+    class ShowMsg extends Thread {
+
+        private String message;
+        private MessageFragment msgFragment;
+
+        public ShowMsg(String message) {
+            this.message = message;
+            this.msgFragment = new MessageFragment();
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            try {
+//                lock.lock();
+//                System.out.println("lock");
+                this.msgFragment.setMessage(message);
+
+                msgHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                                .add(R.id.fragment_container, msgFragment)
+                                .commit();
+                    }
+                });
+
+                msgHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                        }
+                    }
+                }, 3000);
+            } catch (Exception e) {
+                System.out.println("asd");
+            } finally {
+//                lock.unlock();
+//                System.out.println("unlock");
+            }
+        }
+    }
+
+    private class LongOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                lock.lock();
+                messageFragment.setMessage(strings[0]);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, messageFragment)
+                        .commit();
+
+                Thread.sleep(3000);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(messageFragment).commit();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+            return null;
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -240,32 +341,9 @@ public class GameActivity extends FragmentActivity {
                 Intent intent = new Intent(GameActivity.this, MutualScoresActivity.class);
                 intent.putExtra("playersId", Game.getPlayersId());
                 startActivity(intent);
-                finish();
             }
-        }, 4000);
-    }
+        }, 6000);
 
-    private class LongOperation extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                messageFragment.setMessage(strings[0]);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.fragment_container, messageFragment)
-                        .commit();
-
-                Thread.sleep(3000);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(messageFragment).commit();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
     }
 
     public static int getWindowHeight() {
