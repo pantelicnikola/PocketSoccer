@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.provider.BaseColumns;
 
 import com.etf.nikolapantelic.pocketsoccer.common.db.model.ResultModel;
@@ -116,6 +117,18 @@ public class ResultsDAO {
             cursor.close();
         }
         return allScores;
+    }
+
+    static public void deleteByPlayersId(Context context, String playersId) {
+        ResultsDbHelper dbHelper = new ResultsDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String whereClause = ResultsContract.ResultsEntry.COLUMN_PLAYERS_ID + " = ? ";
+        String[] whereArguments = new String[]{playersId};
+        db.delete(
+                ResultsContract.ResultsEntry.TABLE_NAME,
+                whereClause,
+                whereArguments
+        );
     }
 
 }

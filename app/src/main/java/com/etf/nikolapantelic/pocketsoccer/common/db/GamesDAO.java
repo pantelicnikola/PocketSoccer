@@ -77,4 +77,16 @@ public class GamesDAO {
 
         return mutualScores;
     }
+
+    public static void deleteByPlayersId(Context context, String playersId) {
+        GamesDbHelper dbHelper = new GamesDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String whereClause = GamesContract.GamesEntry.COLUMN_PLAYERS_ID + " = ? ";
+        String[] whereArguments = new String[]{playersId};
+        db.delete(
+                GamesContract.GamesEntry.TABLE_NAME,
+                whereClause,
+                whereArguments
+        );
+    }
 }

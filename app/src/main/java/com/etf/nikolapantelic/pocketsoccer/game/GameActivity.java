@@ -343,7 +343,6 @@ public class GameActivity extends FragmentActivity {
                 startActivity(intent);
             }
         }, 6000);
-
     }
 
     public static int getWindowHeight() {
