@@ -46,6 +46,12 @@ public class GamePreferencesHelper {
         setEndType(EndType.initial());
     }
 
+    public void reset() {
+        setFieldType(FieldType.initial());
+        setGameSpeed(GameSpeed.initial());
+        setEndType(EndType.initial());
+    }
+
     public FieldType getFieldType() {
         return FieldType.valueOf(preferences.getString(KEY_FIELD_TYPE, null));
     }

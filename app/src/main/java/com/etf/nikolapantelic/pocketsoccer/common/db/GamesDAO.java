@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class GamesDAO {
-    public static long insertCurrentGame(Context context) {
+    public static void insertCurrentGame(Context context) {
 
         GamesDbHelper gamesDbHelper = new GamesDbHelper(context);
         SQLiteDatabase db = gamesDbHelper.getWritableDatabase();
@@ -31,7 +31,7 @@ public class GamesDAO {
         values.put(GamesContract.GamesEntry.COLUMN_PLAYERS_ID, playersId);
         values.put(GamesContract.GamesEntry.COLUMN_RESULT, GameLogic.getResultMessage());
 
-        return db.insert(GamesContract.GamesEntry.TABLE_NAME, null, values);
+        db.insert(GamesContract.GamesEntry.TABLE_NAME, null, values);
     }
 
 
@@ -73,6 +73,7 @@ public class GamesDAO {
                 );
                 mutualScores.add(model);
             } while (cursor.moveToNext());
+            cursor.close();
         }
 
         return mutualScores;

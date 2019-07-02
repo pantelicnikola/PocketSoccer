@@ -2,6 +2,8 @@ package com.etf.nikolapantelic.pocketsoccer.settings;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioGroup;
 
 import com.etf.nikolapantelic.pocketsoccer.common.GamePreferencesHelper;
@@ -18,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioGroup fieldTypeGroup;
     private RadioGroup gameSpeedGroup;
     private RadioGroup endGameGroup;
+    private Button resetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,10 @@ public class SettingsActivity extends AppCompatActivity {
         fieldTypeGroup = findViewById(R.id.radioGroupField);
         gameSpeedGroup = findViewById(R.id.radioGroupSpeed);
         endGameGroup = findViewById(R.id.radioGroupEnd);
+        resetButton = findViewById(R.id.buttonResetSettings);
 
         model = GamePreferencesHelper.getInstance(this);
-        populateView(model);
+        populateView();
 
         fieldTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -51,9 +55,17 @@ public class SettingsActivity extends AppCompatActivity {
                 model.setEndType(getEndType(checkedId));
             }
         });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.reset();
+                populateView();
+            }
+        });
     }
 
-    private void populateView(GamePreferencesHelper model) {
+    private void populateView() {
         switch (model.getFieldType()) {
             case GREEN:
                 fieldTypeGroup.check(R.id.radioButtonGreen);
@@ -96,8 +108,9 @@ public class SettingsActivity extends AppCompatActivity {
                 return FieldType.YELLOW;
             case R.id.radioButtonGrey:
                 return FieldType.GREY;
+            default:
+                return null;
         }
-        return null;
     }
 
     private GameSpeed getGameSpeed(int id) {
@@ -108,8 +121,9 @@ public class SettingsActivity extends AppCompatActivity {
                 return GameSpeed.MEDIUM;
             case R.id.radioButtonFast:
                 return GameSpeed.FAST;
+            default:
+                return null;
         }
-        return null;
     }
 
     private EndType getEndType(int id) {
@@ -118,9 +132,8 @@ public class SettingsActivity extends AppCompatActivity {
                 return EndType.GOALS;
             case R.id.radioButtonTime:
                 return EndType.TIME;
+            default:
+                return null;
         }
-        return null;
     }
-
-
 }

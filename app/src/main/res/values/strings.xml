@@ -61,6 +61,7 @@
     <string name="settings_choose_end">Choose End Game</string>
     <string name="mutual_scores_main_menu">Go To Main Menu</string>
     <string name="mutual_scores_reset">Reset</string>
+    <string name="settings_reset">Reset to Default</string>
 
 
 </resources>

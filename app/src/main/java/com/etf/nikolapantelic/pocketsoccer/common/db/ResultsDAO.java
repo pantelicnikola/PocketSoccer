@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.provider.BaseColumns;
 
 import com.etf.nikolapantelic.pocketsoccer.common.db.model.ResultModel;
