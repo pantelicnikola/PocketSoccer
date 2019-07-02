@@ -2,8 +2,10 @@ package com.etf.nikolapantelic.pocketsoccer.game;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -53,6 +55,9 @@ public class GameActivity extends FragmentActivity {
     private Handler msgHandler;
 
     private final Lock lock = new ReentrantLock();
+    private GamePhysics gamePhysics;
+
+//    private static Context context;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -71,6 +76,7 @@ public class GameActivity extends FragmentActivity {
         setContentView(R.layout.activity_game);
 
         msgHandler = new Handler();
+        gamePhysics = new GamePhysics(this);
 
         textViewTimer = findViewById(R.id.textViewTimer);
         constraintLayout = findViewById(R.id.root);
@@ -107,26 +113,30 @@ public class GameActivity extends FragmentActivity {
                             @Override
                             public void run() {
                                 if (!Game.paused) {
-                                    GamePhysics.moveBalls();
+                                    gamePhysics.moveBalls();
                                     if (GameLogic.goalOccurred(leftPostX, rightPostX)) {
                                         GameLogic.pause();
+
+                                        playCrowd();
 //
                                         showMessage2(GameLogic.getResultMessage());
 
                                         restoreBallPositions();
                                         GameLogic.resume();
+
                                     }
-                                    if (GameLogic.isGameOver()) {
-                                        GameLogic.pause();
+
+                                }
+                                if (GameLogic.isGameOver()) {
+                                    GameLogic.pause();
 //
 ////                                        GameModel.finished = true;
-                                        timer.cancel();
-                                        timer.purge();
-                                        GameLogic.stopGame();
-                                        moveToScores();
-                                        GameLogic.persistGame(getApplicationContext());
+                                    timer.cancel();
+                                    timer.purge();
+                                    GameLogic.stopGame();
+                                    moveToScores();
+                                    GameLogic.persistGame(getApplicationContext());
 ////                                        GameLogic.resume();
-                                    }
                                 }
                             }
                         });
@@ -360,4 +370,11 @@ public class GameActivity extends FragmentActivity {
     private void saveBallParams() {
         constraintSet.clone(constraintLayout);
     }
+
+    private void playCrowd() {
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.crowd);
+        mp.start();
+    }
+
+
 }

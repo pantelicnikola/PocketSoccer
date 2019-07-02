@@ -41,9 +41,7 @@ public class GamePreferencesHelper {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("initialized", true);
         editor.apply();
-        setFieldType(FieldType.initial());
-        setGameSpeed(GameSpeed.initial());
-        setEndType(EndType.initial());
+        reset();
     }
 
     public void reset() {

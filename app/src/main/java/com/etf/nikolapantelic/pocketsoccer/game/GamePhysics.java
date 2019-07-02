@@ -1,8 +1,11 @@
 package com.etf.nikolapantelic.pocketsoccer.game;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.etf.nikolapantelic.pocketsoccer.R;
 import com.etf.nikolapantelic.pocketsoccer.model.Ball;
 import com.etf.nikolapantelic.pocketsoccer.model.Game;
 
@@ -12,14 +15,21 @@ public class GamePhysics {
     private static final float MOVING_THRESHOLD = 1.0f;
     private static final float BOUNCE_FACTOR = 0.9f;
 
+    private Context context;
+    private MediaPlayer mp;
 
-    public static void moveBalls() {
+    public GamePhysics(Context context) {
+        this.context = context;
+        mp = MediaPlayer.create(context, R.raw.collision);
+    }
+
+    public void moveBalls() {
         for (Ball ball : Game.getAllBalls()) {
             move(ball);
         }
     }
 
-    private static void move(@NonNull Ball ball) {
+    private void move(@NonNull Ball ball) {
         ball.setHitTop(false);
         ball.setHitBottom(false);
         if (ball.isMoving()) {
@@ -63,6 +73,7 @@ public class GamePhysics {
                     ball.getImageView().setX(x - ball.getVelX() / 10);
                     ball.getImageView().setY(y - ball.getVelY() / 10);
                     calculateCollision(b, ball);
+                    playCollision();
                     break;
                 }
             }
@@ -134,5 +145,9 @@ public class GamePhysics {
 
         ball2.setVelX(resVelX2 * BOUNCE_FACTOR);
         ball2.setVelY(resVelY2 * BOUNCE_FACTOR);
+    }
+
+    private void playCollision() {
+        mp.start();
     }
 }
